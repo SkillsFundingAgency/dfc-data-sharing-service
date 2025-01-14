@@ -3,19 +3,19 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 
-namespace DSS.ActionPlans
+namespace DSS.ActionPlans.HTTP_Functions
 {
-    public class Function1
+    public class GetByCustomerId
     {
-        private readonly ILogger<Function1> _logger;
+        private readonly ILogger<GetByCustomerId> _logger;
 
-        public Function1(ILogger<Function1> logger)
+        public GetByCustomerId(ILogger<GetByCustomerId> logger)
         {
             _logger = logger;
         }
 
-        [Function("Function1")]
-        public IActionResult Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")] HttpRequest req)
+        [Function("GetByCustomerId")]
+        public IActionResult Run([HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequest req)
         {
             _logger.LogInformation("C# HTTP trigger function processed a request.");
             return new OkObjectResult("Welcome to Azure Functions!");

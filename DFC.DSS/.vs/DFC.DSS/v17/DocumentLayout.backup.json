@@ -1,12 +1,7 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\BMATTHEWS\\Documents\\Repos\\dfc-data-sharing-service\\DFC.DSS\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{EF037414-069B-4A9F-AA02-5190141BDD7C}|DSS.ActionPlans\\DSS.ActionPlans.csproj|c:\\users\\bmatthews\\documents\\repos\\dfc-data-sharing-service\\dfc.dss\\dss.actionplans\\function1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{EF037414-069B-4A9F-AA02-5190141BDD7C}|DSS.ActionPlans\\DSS.ActionPlans.csproj|solutionrelative:dss.actionplans\\function1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    }
-  ],
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 1,
@@ -14,21 +9,8 @@
       "DocumentGroups": [
         {
           "DockedHeight": 216,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": -1,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Function1.cs",
-              "DocumentMoniker": "C:\\Users\\BMATTHEWS\\Documents\\Repos\\dfc-data-sharing-service\\DFC.DSS\\DSS.ActionPlans\\Function1.cs",
-              "RelativeDocumentMoniker": "DSS.ActionPlans\\Function1.cs",
-              "ToolTip": "C:\\Users\\BMATTHEWS\\Documents\\Repos\\dfc-data-sharing-service\\DFC.DSS\\DSS.ActionPlans\\Function1.cs",
-              "RelativeToolTip": "DSS.ActionPlans\\Function1.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-14T14:39:53.392Z",
-              "EditorCaption": ""
-            },
             {
               "$type": "Bookmark",
               "Name": "ST:1:0:{7f40df72-066b-4810-a08b-c0fbed76c948}"
