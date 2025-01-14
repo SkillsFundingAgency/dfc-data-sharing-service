@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "DSS.NotificationListener": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7140",
+      "launchBrowser": false
+    }
+  }
+}

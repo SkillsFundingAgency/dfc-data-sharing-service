@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "DSS.Collections": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7153",
+      "launchBrowser": false
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "DSS.ContentPushService": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7187",
+      "launchBrowser": false
+    }
+  }
+}
