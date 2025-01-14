@@ -4,7 +4,7 @@
 
 | API Name | Description | Latest Version |
 | -- | -- | -- |
-| Action Plans | X | X |
+| [Action Plans]("/DFC.DSS/DSS.ActionPlans/README.md") | X | X |
 | Actions | X | X |
 | Address | X | X |
 | Adviser Details | X | X |
