@@ -1,5 +1,4 @@
 using DSS.Interfaces;
-using DSS.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Cosmos;
@@ -29,7 +28,7 @@ namespace DSS.NotificationListener
             string databaseName = Environment.GetEnvironmentVariable("notificationDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("notificationContainerName").ToString();
 
-            ItemResponse<Notification> notificationObject = await _cosmos.GenericRetrieveDocument<Notification>(
+            ItemResponse<Models.Notification> notificationObject = await _cosmos.GenericRetrieveDocument<Models.Notification>(
                 req.Headers["NotificationId"].ToString(), databaseName, containerName
             );
 

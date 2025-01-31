@@ -1,5 +1,4 @@
 using DSS.Interfaces;
-using DSS.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Cosmos;
@@ -29,7 +28,7 @@ namespace DSS.ActionPlans.HTTP_Functions
             string databaseName = Environment.GetEnvironmentVariable("actionPlanDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("actionPlanContainerName").ToString();
 
-            ItemResponse<ActionPlan> actionPlanObject = await _cosmos.GenericRetrieveDocument<ActionPlan>(
+            ItemResponse<Models.ActionPlan> actionPlanObject = await _cosmos.GenericRetrieveDocument<Models.ActionPlan>(
                 req.Headers["ActionPlanId"].ToString(), databaseName, containerName
             );
 
