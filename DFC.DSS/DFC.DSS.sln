@@ -55,6 +55,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DSS.SharedServices", "DSS.S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DSS.Interfaces", "DSS.Interfaces\DSS.Interfaces.csproj", "{2839FC90-9897-4FC7-B9B0-6E840931C17D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DSS.Models", "DSS.Models\DSS.Models.csproj", "{B8FF83CB-EC03-4CCB-B5E4-94DA7ABA7ECF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -161,6 +163,10 @@ Global
 		{2839FC90-9897-4FC7-B9B0-6E840931C17D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2839FC90-9897-4FC7-B9B0-6E840931C17D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2839FC90-9897-4FC7-B9B0-6E840931C17D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8FF83CB-EC03-4CCB-B5E4-94DA7ABA7ECF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8FF83CB-EC03-4CCB-B5E4-94DA7ABA7ECF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8FF83CB-EC03-4CCB-B5E4-94DA7ABA7ECF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8FF83CB-EC03-4CCB-B5E4-94DA7ABA7ECF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
