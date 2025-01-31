@@ -1,4 +1,5 @@
 using DSS.Interfaces;
+using DSS.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
@@ -25,8 +26,11 @@ namespace DSS.NotificationListener
             string databaseName = Environment.GetEnvironmentVariable("notificationDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("notificationContainerName").ToString();
 
-            var hello = await _cosmos.GetNotificationDocument("<REPLACE ME>", databaseName, containerName);
+            //var hello = await _cosmos.GetNotificationDocument("<REPLACE ME>", databaseName, containerName);
             //var hello = await _cosmos.CreateNewNotificationDocument();
+
+            var hello = await _cosmos.GenericRetrieveDocument<Notification>("<REPLACE ME>", databaseName, containerName);
+
             return new OkObjectResult("Welcome to Azure Functions!");
         }
     }

@@ -2,6 +2,7 @@
 using DSS.Models;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Logging;
+using System.Runtime.CompilerServices;
 
 namespace DSS.SharedServices
 {
@@ -14,6 +15,21 @@ namespace DSS.SharedServices
         {
             _cosmosDbClient = cosmosClient;
             _logger = logger;
+        }
+
+        // This one will retrieve a generic item using the 'T' decorator
+        public async Task<ItemResponse<T>> GenericRetrieveDocument<T>(string documentId, string databaseName, string containerName)
+        {
+            _logger.LogInformation($"{nameof(GenericRetrieveDocument)} function has been invoked");
+            Container cosmosDbNotificationContainer = _cosmosDbClient.GetContainer(databaseName, containerName);
+
+            _logger.LogInformation("Attempting to retrieve an existing document from Cosmos DB");
+
+            ItemResponse<T> createRequestResponse = await cosmosDbNotificationContainer.ReadItemAsync<T>(documentId, PartitionKey.None);
+
+            _logger.LogInformation($"{nameof(GenericRetrieveDocument)} function has finished invocation");
+
+            return createRequestResponse;
         }
 
         public async Task<ItemResponse<Notification>> GetNotificationDocument(string documentId, string databaseName, string containerName)

@@ -7,5 +7,6 @@ namespace DSS.Interfaces
     {
         Task<ItemResponse<Notification>> GetNotificationDocument(string documentId, string databaseName, string containerName);
         Task<ItemResponse<Notification>> CreateNewNotificationDocument(string databaseName, string containerName);
+        Task<ItemResponse<T>> GenericRetrieveDocument<T>(string documentId, string databaseName, string containerName);
     }
 }
