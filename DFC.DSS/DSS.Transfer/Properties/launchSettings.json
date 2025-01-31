@@ -1,9 +1,0 @@
-{
-  "profiles": {
-    "DSS.Transfer": {
-      "commandName": "Project",
-      "commandLineArgs": "--port 7276",
-      "launchBrowser": false
-    }
-  }
-}

@@ -1,9 +1,0 @@
-{
-  "profiles": {
-    "DSS.Contact": {
-      "commandName": "Project",
-      "commandLineArgs": "--port 7154",
-      "launchBrowser": false
-    }
-  }
-}

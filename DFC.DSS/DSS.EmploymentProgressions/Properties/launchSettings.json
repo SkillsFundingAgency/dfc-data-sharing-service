@@ -1,9 +1,0 @@
-{
-  "profiles": {
-    "DSS.EmploymentProgressions": {
-      "commandName": "Project",
-      "commandLineArgs": "--port 7265",
-      "launchBrowser": false
-    }
-  }
-}

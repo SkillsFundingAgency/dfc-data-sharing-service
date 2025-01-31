@@ -1,9 +1,0 @@
-{
-  "profiles": {
-    "DSS.DiversityDetails": {
-      "commandName": "Project",
-      "commandLineArgs": "--port 7017",
-      "launchBrowser": false
-    }
-  }
-}

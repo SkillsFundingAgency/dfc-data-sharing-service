@@ -1,9 +1,0 @@
-{
-  "profiles": {
-    "DSS.Outcome": {
-      "commandName": "Project",
-      "commandLineArgs": "--port 7012",
-      "launchBrowser": false
-    }
-  }
-}
