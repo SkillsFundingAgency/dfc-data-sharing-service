@@ -20,7 +20,6 @@ namespace NCS.DSS.NotificationsListener
                    services.AddSingleton<ICosmosDbService, CosmosDbService>();
                    services.AddSingleton(sp =>
                    {
-                       //var config = sp.GetRequiredService<IOptions<NotificationsListenerConfigurationSettings>>().Value;
                        var options = new CosmosClientOptions()
                        {
                            ConnectionMode = ConnectionMode.Gateway

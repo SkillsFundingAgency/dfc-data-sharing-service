@@ -1,8 +1,6 @@
 ﻿using DSS.Interfaces;
-using DSS.Models;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Logging;
-using System.Runtime.CompilerServices;
 
 namespace DSS.SharedServices
 {
@@ -26,13 +24,13 @@ namespace DSS.SharedServices
             _logger.LogInformation("Attempting to retrieve an existing document from Cosmos DB");
 
             ItemResponse<T> createRequestResponse = await cosmosDbNotificationContainer.ReadItemAsync<T>(documentId, PartitionKey.None);
-
+            
             _logger.LogInformation($"{nameof(GenericRetrieveDocument)} function has finished invocation");
 
             return createRequestResponse;
         }
 
-        public async Task<ItemResponse<Notification>> GetNotificationDocument(string documentId, string databaseName, string containerName)
+        /*public async Task<ItemResponse<Notification>> GetNotificationDocument(string documentId, string databaseName, string containerName)
         {
             _logger.LogInformation($"{nameof(GetNotificationDocument)} function has been invoked");
             Container cosmosDbNotificationContainer = _cosmosDbClient.GetContainer(databaseName, containerName);
@@ -68,6 +66,6 @@ namespace DSS.SharedServices
             _logger.LogInformation($"{nameof(CreateNewNotificationDocument)} function has finished invocation");
 
             return createRequestResponse;
-        }
+        }*/
     }
 }
