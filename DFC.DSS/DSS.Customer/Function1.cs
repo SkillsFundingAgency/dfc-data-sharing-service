@@ -29,7 +29,7 @@ namespace Customer
             string containerName = Environment.GetEnvironmentVariable("customerContainerName").ToString();
 
             ItemResponse<DSS.Models.Customer> customerObject = await _cosmos.GenericRetrieveDocument<DSS.Models.Customer>(
-                "<REPLACE ME>", databaseName, containerName
+                req.Headers["CustomerId"].ToString(), databaseName, containerName
             );
 
             return new JsonResult(customerObject.Resource, new JsonSerializerOptions())

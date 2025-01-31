@@ -30,7 +30,7 @@ namespace DSS.NotificationListener
             string containerName = Environment.GetEnvironmentVariable("notificationContainerName").ToString();
 
             ItemResponse<Notification> notificationObject = await _cosmos.GenericRetrieveDocument<Notification>(
-                "<REPLACE ME>", databaseName, containerName
+                req.Headers["NotificationId"].ToString(), databaseName, containerName
             );
 
             return new JsonResult(notificationObject.Resource, new JsonSerializerOptions())
