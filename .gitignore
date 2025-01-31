@@ -1,0 +1,12 @@
+**/.vs
+**/bin
+**/obj
+*.cache
+
+launchSettings.json
+
+*.suo
+*.user
+_ReSharper.*
+bin
+obj
