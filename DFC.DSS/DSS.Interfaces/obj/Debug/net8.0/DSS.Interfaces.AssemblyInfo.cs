@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DSS.Interfaces")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+90ba3da29e8a0e428fd80460a20b574a845e25cc")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f1554ae5e3aa076fc8a180c1faad9e3c54877952")]
 [assembly: System.Reflection.AssemblyProductAttribute("DSS.Interfaces")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DSS.Interfaces")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

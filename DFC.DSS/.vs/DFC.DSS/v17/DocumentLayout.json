@@ -3,28 +3,8 @@
   "WorkspaceRootPath": "C:\\Users\\BMATTHEWS\\Documents\\Repos\\dfc-data-sharing-service\\DFC.DSS\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{0ABAB478-3EC8-476D-A320-080B66D6BC94}|DSS.SharedServices\\DSS.SharedServices.csproj|c:\\users\\bmatthews\\documents\\repos\\dfc-data-sharing-service\\dfc.dss\\dss.sharedservices\\servicebusservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0ABAB478-3EC8-476D-A320-080B66D6BC94}|DSS.SharedServices\\DSS.SharedServices.csproj|solutionrelative:dss.sharedservices\\servicebusservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{0ABAB478-3EC8-476D-A320-080B66D6BC94}|DSS.SharedServices\\DSS.SharedServices.csproj|c:\\users\\bmatthews\\documents\\repos\\dfc-data-sharing-service\\dfc.dss\\dss.sharedservices\\cosmosdbservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0ABAB478-3EC8-476D-A320-080B66D6BC94}|DSS.SharedServices\\DSS.SharedServices.csproj|solutionrelative:dss.sharedservices\\cosmosdbservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2839FC90-9897-4FC7-B9B0-6E840931C17D}|DSS.Interfaces\\DSS.Interfaces.csproj|c:\\users\\bmatthews\\documents\\repos\\dfc-data-sharing-service\\dfc.dss\\dss.interfaces\\icosmosdbservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2839FC90-9897-4FC7-B9B0-6E840931C17D}|DSS.Interfaces\\DSS.Interfaces.csproj|solutionrelative:dss.interfaces\\icosmosdbservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2839FC90-9897-4FC7-B9B0-6E840931C17D}|DSS.Interfaces\\DSS.Interfaces.csproj|c:\\users\\bmatthews\\documents\\repos\\dfc-data-sharing-service\\dfc.dss\\dss.interfaces\\iservicebusservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2839FC90-9897-4FC7-B9B0-6E840931C17D}|DSS.Interfaces\\DSS.Interfaces.csproj|solutionrelative:dss.interfaces\\iservicebusservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0ABAB478-3EC8-476D-A320-080B66D6BC94}|DSS.SharedServices\\DSS.SharedServices.csproj|c:\\users\\bmatthews\\documents\\repos\\dfc-data-sharing-service\\dfc.dss\\dss.sharedservices\\dss.sharedservices.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
-      "RelativeMoniker": "D:0:0:{0ABAB478-3EC8-476D-A320-080B66D6BC94}|DSS.SharedServices\\DSS.SharedServices.csproj|solutionrelative:dss.sharedservices\\dss.sharedservices.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{EF037414-069B-4A9F-AA02-5190141BDD7C}|DSS.ActionPlans\\DSS.ActionPlans.csproj|c:\\users\\bmatthews\\documents\\repos\\dfc-data-sharing-service\\dfc.dss\\dss.actionplans\\http functions\\getbycustomerid.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{EF037414-069B-4A9F-AA02-5190141BDD7C}|DSS.ActionPlans\\DSS.ActionPlans.csproj|solutionrelative:dss.actionplans\\http functions\\getbycustomerid.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -34,7 +14,7 @@
       "DocumentGroups": [
         {
           "DockedHeight": 216,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
@@ -46,80 +26,15 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "IServiceBusService.cs",
-              "DocumentMoniker": "C:\\Users\\BMATTHEWS\\Documents\\Repos\\dfc-data-sharing-service\\DFC.DSS\\DSS.Interfaces\\IServiceBusService.cs",
-              "RelativeDocumentMoniker": "DSS.Interfaces\\IServiceBusService.cs",
-              "ToolTip": "C:\\Users\\BMATTHEWS\\Documents\\Repos\\dfc-data-sharing-service\\DFC.DSS\\DSS.Interfaces\\IServiceBusService.cs",
-              "RelativeToolTip": "DSS.Interfaces\\IServiceBusService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-14T16:46:45.408Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "ICosmosDbService.cs",
-              "DocumentMoniker": "C:\\Users\\BMATTHEWS\\Documents\\Repos\\dfc-data-sharing-service\\DFC.DSS\\DSS.Interfaces\\ICosmosDbService.cs",
-              "RelativeDocumentMoniker": "DSS.Interfaces\\ICosmosDbService.cs",
-              "ToolTip": "C:\\Users\\BMATTHEWS\\Documents\\Repos\\dfc-data-sharing-service\\DFC.DSS\\DSS.Interfaces\\ICosmosDbService.cs",
-              "RelativeToolTip": "DSS.Interfaces\\ICosmosDbService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAVAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-14T16:46:11.688Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "ServiceBusService.cs",
-              "DocumentMoniker": "C:\\Users\\BMATTHEWS\\Documents\\Repos\\dfc-data-sharing-service\\DFC.DSS\\DSS.SharedServices\\ServiceBusService.cs",
-              "RelativeDocumentMoniker": "DSS.SharedServices\\ServiceBusService.cs",
-              "ToolTip": "C:\\Users\\BMATTHEWS\\Documents\\Repos\\dfc-data-sharing-service\\DFC.DSS\\DSS.SharedServices\\ServiceBusService.cs",
-              "RelativeToolTip": "DSS.SharedServices\\ServiceBusService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-14T16:45:04.187Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "DSS.SharedServices",
-              "DocumentMoniker": "C:\\Users\\BMATTHEWS\\Documents\\Repos\\dfc-data-sharing-service\\DFC.DSS\\DSS.SharedServices\\DSS.SharedServices.csproj",
-              "RelativeDocumentMoniker": "DSS.SharedServices\\DSS.SharedServices.csproj",
-              "ToolTip": "C:\\Users\\BMATTHEWS\\Documents\\Repos\\dfc-data-sharing-service\\DFC.DSS\\DSS.SharedServices\\DSS.SharedServices.csproj",
-              "RelativeToolTip": "DSS.SharedServices\\DSS.SharedServices.csproj",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-01-14T16:43:01.782Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
               "Title": "CosmosDbService.cs",
               "DocumentMoniker": "C:\\Users\\BMATTHEWS\\Documents\\Repos\\dfc-data-sharing-service\\DFC.DSS\\DSS.SharedServices\\CosmosDbService.cs",
               "RelativeDocumentMoniker": "DSS.SharedServices\\CosmosDbService.cs",
               "ToolTip": "C:\\Users\\BMATTHEWS\\Documents\\Repos\\dfc-data-sharing-service\\DFC.DSS\\DSS.SharedServices\\CosmosDbService.cs",
               "RelativeToolTip": "DSS.SharedServices\\CosmosDbService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAzAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-14T16:42:55.038Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "GetByCustomerId.cs",
-              "DocumentMoniker": "C:\\Users\\BMATTHEWS\\Documents\\Repos\\dfc-data-sharing-service\\DFC.DSS\\DSS.ActionPlans\\HTTP Functions\\GetByCustomerId.cs",
-              "RelativeDocumentMoniker": "DSS.ActionPlans\\HTTP Functions\\GetByCustomerId.cs",
-              "ToolTip": "C:\\Users\\BMATTHEWS\\Documents\\Repos\\dfc-data-sharing-service\\DFC.DSS\\DSS.ActionPlans\\HTTP Functions\\GetByCustomerId.cs",
-              "RelativeToolTip": "DSS.ActionPlans\\HTTP Functions\\GetByCustomerId.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAgAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-14T15:37:27.125Z",
+              "WhenOpened": "2025-01-31T10:35:09.694Z",
               "EditorCaption": ""
             }
           ]
