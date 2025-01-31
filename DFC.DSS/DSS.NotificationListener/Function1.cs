@@ -21,7 +21,11 @@ namespace DSS.NotificationListener
         public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequest req)
         {
             _logger.LogInformation("C# HTTP trigger function processed a request.");
-            //var hello = await _cosmos.GetNotificationDocument(<REPLACE WITH DOC ID>);
+
+            string databaseName = Environment.GetEnvironmentVariable("notificationDatabaseName").ToString();
+            string containerName = Environment.GetEnvironmentVariable("notificationContainerName").ToString();
+
+            var hello = await _cosmos.GetNotificationDocument("<REPLACE ME>", databaseName, containerName);
             //var hello = await _cosmos.CreateNewNotificationDocument();
             return new OkObjectResult("Welcome to Azure Functions!");
         }

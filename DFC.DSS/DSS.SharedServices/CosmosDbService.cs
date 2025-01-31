@@ -16,13 +16,12 @@ namespace DSS.SharedServices
             _logger = logger;
         }
 
-        // As an example
-        public async Task<ItemResponse<Notification>> GetNotificationDocument(string documentId)
+        public async Task<ItemResponse<Notification>> GetNotificationDocument(string documentId, string databaseName, string containerName)
         {
             _logger.LogInformation($"{nameof(GetNotificationDocument)} function has been invoked");
-            Container cosmosDbNotificationContainer = _cosmosDbClient.GetContainer("<REPLACE>", "<REPLACE>");
+            Container cosmosDbNotificationContainer = _cosmosDbClient.GetContainer(databaseName, containerName);
 
-            _logger.LogInformation("Attempting to create new document in Cosmos DB");
+            _logger.LogInformation("Attempting to retrieve an existing document from Cosmos DB");
 
             ItemResponse<Notification> createRequestResponse = await cosmosDbNotificationContainer.ReadItemAsync<Notification>(documentId, PartitionKey.None);
 
@@ -31,7 +30,7 @@ namespace DSS.SharedServices
             return createRequestResponse;
         }
 
-        public async Task<ItemResponse<Notification>> CreateNewNotificationDocument()
+        public async Task<ItemResponse<Notification>> CreateNewNotificationDocument(string databaseName, string containerName)
         {
             Notification newDoc = new Notification()
             {
@@ -44,9 +43,9 @@ namespace DSS.SharedServices
             };
 
             _logger.LogInformation($"{nameof(CreateNewNotificationDocument)} function has been invoked");
-            Container cosmosDbNotificationContainer = _cosmosDbClient.GetContainer("<REPLACE>", "<REPLACE>");
+            Container cosmosDbNotificationContainer = _cosmosDbClient.GetContainer(databaseName, containerName);
 
-            _logger.LogInformation("Attempting to create new document in Cosmos DB");
+            _logger.LogInformation("Attempting to create a new document within Cosmos DB");
 
             ItemResponse<Notification> createRequestResponse = await cosmosDbNotificationContainer.CreateItemAsync(newDoc, PartitionKey.None);
 
