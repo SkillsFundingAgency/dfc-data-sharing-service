@@ -1,17 +1,18 @@
 ﻿using DSS.Interfaces;
 using Microsoft.Azure.Cosmos;
+using Microsoft.Extensions.Logging;
 
 namespace DSS.SharedServices
 {
     public class CosmosDbService : ICosmosDbService
     {
         private readonly CosmosClient _cosmosDbClient;
-        //private readonly ILogger<CosmosDbService> _logger;
+        private readonly ILogger<CosmosDbService> _logger;
 
-        public CosmosDbService(CosmosClient cosmosClient/*, ILogger<CosmosDbService> logger*/)
+        public CosmosDbService(CosmosClient cosmosClient, ILogger<CosmosDbService> logger)
         {
             _cosmosDbClient = cosmosClient;
-            //_logger = logger;
+            _logger = logger;
         }
 
         /*public async Task<ItemResponse<T>> CreateNewDocument(string databaseName, string containerName, Notification newDocument)
