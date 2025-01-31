@@ -1,12 +1,4 @@
-**/.vs
-**/bin
-**/obj
+bin/
+obj/
+.vs/
 *.cache
-
-launchSettings.json
-
-*.suo
-*.user
-_ReSharper.*
-bin
-obj
