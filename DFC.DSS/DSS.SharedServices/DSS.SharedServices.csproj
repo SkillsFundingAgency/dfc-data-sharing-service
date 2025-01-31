@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DSS.Interfaces\DSS.Interfaces.csproj" />
+    <ProjectReference Include="..\DSS.Models\DSS.Models.csproj" />
   </ItemGroup>
 
 </Project>

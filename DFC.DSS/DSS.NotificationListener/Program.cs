@@ -1,14 +1,40 @@
+using DSS.Interfaces;
+using DSS.SharedServices;
+using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-var host = new HostBuilder()
-    .ConfigureFunctionsWebApplication()
-    .ConfigureServices(services =>
+namespace NCS.DSS.NotificationsListener
+{
+    internal class Program
     {
-        services.AddApplicationInsightsTelemetryWorkerService();
-        services.ConfigureFunctionsApplicationInsights();
-    })
-    .Build();
+        private static async Task Main(string[] args)
+        {
+            var host = new HostBuilder()
+               .ConfigureFunctionsWebApplication()
+               .ConfigureServices(services =>
+               {
+                   services.AddApplicationInsightsTelemetryWorkerService();
+                   services.ConfigureFunctionsApplicationInsights();
+                   services.AddSingleton<ICosmosDbService, CosmosDbService>();
+                   services.AddSingleton(sp =>
+                   {
+                       //var config = sp.GetRequiredService<IOptions<NotificationsListenerConfigurationSettings>>().Value;
+                       var options = new CosmosClientOptions()
+                       {
+                           ConnectionMode = ConnectionMode.Gateway
+                       };
 
-host.Run();
+                       return new CosmosClient(
+                           Environment.GetEnvironmentVariable("cosmosDbUri"),
+                           Environment.GetEnvironmentVariable("cosmosDbAccessKey"),
+                           options
+                       );
+                   });
+               })
+               .Build();
+            host.Run();
+        }
+    }
+}
