@@ -84,6 +84,43 @@ namespace DSS.SharedServices
             }
         }
 
+        public async Task<T> GenericReplaceDocument<T>(T updatedDocumentObject, string existingDocumentId, string databaseName, string containerName)
+        {
+            _logger.LogInformation($"Method '{nameof(GenericReplaceDocument)}' has been invoked");
+            _logger.LogInformation($"Attempting to retrieve container '{containerName}' from database '{databaseName}'");
+
+            Container cosmosDbContainer = _cosmosDbClient.GetContainer(databaseName, containerName);
+
+            _logger.LogInformation($"Attempting to replace existing document with ID '{existingDocumentId}' within Cosmos DB");
+
+            // Convert the document object into a Stream
+            string jsonSerialized = JsonConvert.SerializeObject(updatedDocumentObject);
+            byte[] jsonAsByteArray = System.Text.Encoding.UTF8.GetBytes(jsonSerialized);
+            MemoryStream updatedDocumentAsStream = new MemoryStream(jsonAsByteArray);
+
+            using (ResponseMessage response = await cosmosDbContainer.ReplaceItemStreamAsync(updatedDocumentAsStream, existingDocumentId, PartitionKey.None))
+            {
+                _logger.LogInformation($"Status code returned was '{((int)response.StatusCode)} - {response.StatusCode}'");
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    _logger.LogWarning($"Unable to replace document within Cosmos DB");
+                    LogMethodExit(nameof(GenericReplaceDocument).ToString());
+                    return default;
+                }
+
+                string content;
+                using (StreamReader streamReader = new StreamReader(response.Content))
+                {
+                    content = await streamReader.ReadToEndAsync();
+                }
+
+                _logger.LogInformation($"Document with ID '{existingDocumentId}' was replaced successfully");
+                LogMethodExit(nameof(GenericReplaceDocument).ToString());
+                return JsonConvert.DeserializeObject<T>(content);
+            }
+        }
+
         // Private helper methods
         private void LogMethodExit(string nameOfMethod)
         {
