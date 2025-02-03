@@ -5,7 +5,7 @@ namespace DSS.Models
     public class Transfer
     {
         [JsonProperty(PropertyName = "id")]
-        public Guid? TransferId { get; set; }
+        public Guid? TransferId { get; set; } = Guid.NewGuid();
 
         public Guid CustomerId { get; set; }
 

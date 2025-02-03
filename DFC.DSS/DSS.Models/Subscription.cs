@@ -5,7 +5,7 @@ namespace DSS.Models
     public class Subscription
     {
         [JsonProperty(PropertyName = "id")]
-        public Guid? SubscriptionId { get; set; }
+        public Guid? SubscriptionId { get; set; } = Guid.NewGuid();
 
         public Guid? CustomerId { get; set; }
 

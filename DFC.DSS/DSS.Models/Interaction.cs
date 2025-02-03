@@ -6,7 +6,7 @@ namespace DSS.Models
     public class Interaction
     {
         [JsonProperty(PropertyName = "id")]
-        public Guid? InteractionId { get; set; }
+        public Guid? InteractionId { get; set; } = Guid.NewGuid();
 
         public Guid? CustomerId { get; set; }
 

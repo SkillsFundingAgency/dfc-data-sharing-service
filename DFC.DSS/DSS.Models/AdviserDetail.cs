@@ -5,7 +5,7 @@ namespace DSS.Models
     public class AdviserDetail
     {
         [JsonProperty(PropertyName = "id")]
-        public Guid? AdviserDetailId { get; set; }
+        public Guid? AdviserDetailId { get; set; } = Guid.NewGuid();
 
         public string AdviserName { get; set; }
 

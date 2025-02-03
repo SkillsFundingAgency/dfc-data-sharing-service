@@ -6,7 +6,7 @@ namespace DSS.Models
     public class DiversityDetail
     {
         [JsonProperty(PropertyName = "id")]
-        public Guid? DiversityId { get; set; }
+        public Guid? DiversityId { get; set; } = Guid.NewGuid();
 
         public Guid? CustomerId { get; set; }
 

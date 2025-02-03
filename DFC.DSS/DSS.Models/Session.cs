@@ -6,7 +6,7 @@ namespace DSS.Models
     public class Session
     {
         [JsonProperty(PropertyName = "id")]
-        public Guid? SessionId { get; set; }
+        public Guid? SessionId { get; set; } = Guid.NewGuid();
 
         public Guid? CustomerId { get; set; }
 

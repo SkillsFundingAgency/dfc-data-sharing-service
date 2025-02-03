@@ -6,7 +6,7 @@ namespace DSS.Models
     public class EmploymentProgression
     {
         [JsonProperty(PropertyName = "id")]
-        public Guid? EmploymentProgressionId { get; set; }
+        public Guid? EmploymentProgressionId { get; set; } = Guid.NewGuid();
 
         public Guid? CustomerId { get; set; }
 

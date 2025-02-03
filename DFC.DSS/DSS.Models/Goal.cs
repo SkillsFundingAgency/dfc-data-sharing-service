@@ -6,7 +6,7 @@ namespace DSS.Models
     public class Goal
     {
         [JsonProperty(PropertyName = "id")]
-        public Guid? GoalId { get; set; }
+        public Guid? GoalId { get; set; } = Guid.NewGuid();
 
         public Guid? CustomerId { get; set; }
 

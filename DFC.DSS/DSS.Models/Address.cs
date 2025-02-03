@@ -5,7 +5,7 @@ namespace DSS.Models
     public class Address
     {
         [JsonProperty(PropertyName = "id")]
-        public Guid? AddressId { get; set; }
+        public Guid? AddressId { get; set; } = Guid.NewGuid();
 
         public Guid? CustomerId { get; set; }
 

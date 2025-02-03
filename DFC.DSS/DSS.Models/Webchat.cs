@@ -5,7 +5,7 @@ namespace DSS.Models
     public class WebChat
     {
         [JsonProperty(PropertyName = "id")]
-        public Guid? WebChatId { get; set; }
+        public Guid? WebChatId { get; set; } = Guid.NewGuid();
 
         public Guid? CustomerId { get; set; }
 

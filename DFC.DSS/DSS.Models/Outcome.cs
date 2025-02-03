@@ -6,7 +6,7 @@ namespace DSS.Models
     public class Outcome
     {
         [JsonProperty(PropertyName = "id")]
-        public Guid? OutcomeId { get; set; }
+        public Guid? OutcomeId { get; set; } = Guid.NewGuid();
 
         public Guid? CustomerId { get; set; }
 

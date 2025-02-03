@@ -5,7 +5,7 @@ namespace DSS.Models
     public class Collection
     {
         [JsonProperty(PropertyName = "id")]
-        public Guid CollectionId { get; set; }
+        public Guid CollectionId { get; set; } = Guid.NewGuid();
 
         public Uri CollectionReports { get; set; }
 
