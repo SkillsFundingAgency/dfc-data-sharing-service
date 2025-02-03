@@ -21,7 +21,7 @@ namespace DSS.Models
         public DateTime? OutcomeClaimedDate { get; set; }
 
         public DateTime? OutcomeEffectiveDate { get; set; }
-        
+
         public bool? IsPriorityCustomer { get; set; }
 
         public string TouchpointId { get; set; }

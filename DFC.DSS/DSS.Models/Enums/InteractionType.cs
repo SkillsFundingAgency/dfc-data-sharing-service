@@ -33,7 +33,7 @@ namespace DSS.Models.Enums
 
         [Description("Voice of customer survey")]
         VoiceOfCustomerSurvey = 10,
-        
+
         [Description("Call back successful")]
         CallBackSuccess = 11,
 

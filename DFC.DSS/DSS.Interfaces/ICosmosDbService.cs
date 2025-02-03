@@ -1,5 +1,4 @@
-﻿using DSS.Models;
-using Microsoft.Azure.Cosmos;
+﻿using Microsoft.Azure.Cosmos;
 
 namespace DSS.Interfaces
 {

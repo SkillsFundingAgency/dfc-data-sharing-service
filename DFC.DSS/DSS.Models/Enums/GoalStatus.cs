@@ -6,9 +6,9 @@ namespace DSS.Models.Enums
     {
         [Description("In progress")]
         InProgress = 1,
-        
+
         Achieved = 2,
-        
+
         [Description("No longer relevant")]
         NoLongerRelevant = 99
     }

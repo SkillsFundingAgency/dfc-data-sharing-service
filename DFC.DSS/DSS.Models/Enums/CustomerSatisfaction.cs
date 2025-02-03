@@ -6,10 +6,10 @@ namespace DSS.Models.Enums
     {
         [Description("Yes")]
         Satisfied = 1,
-        
+
         [Description("No")]
         NotSatisfied = 2,
-        
+
         [Description("N/A")]
         NotAvailable = 99
     }

@@ -24,7 +24,7 @@ namespace DSS.SharedServices
             _logger.LogInformation("Attempting to retrieve an existing document from Cosmos DB");
 
             ItemResponse<T> createRequestResponse = await cosmosDbNotificationContainer.ReadItemAsync<T>(documentId, PartitionKey.None);
-            
+
             _logger.LogInformation($"{nameof(GenericRetrieveDocument)} function has finished invocation");
 
             return createRequestResponse;

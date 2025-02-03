@@ -21,11 +21,11 @@ namespace DSS.Models
         public Gender? Gender { get; set; }
 
         public string UniqueLearnerNumber { get; set; }
-        
+
         public bool? OptInUserResearch { get; set; }
-        
+
         public bool? OptInMarketResearch { get; set; }
-        
+
         public DateTime? DateOfTermination { get; set; }
 
         public ReasonForTermination? ReasonForTermination { get; set; }

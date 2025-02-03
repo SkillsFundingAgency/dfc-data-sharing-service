@@ -29,7 +29,7 @@ namespace DSS.Models
         public decimal? Longitude { get; set; }
 
         public EmploymentHours? EmploymentHours { get; set; }
-        
+
         public DateTime? DateOfEmployment { get; set; }
 
         public DateTime? DateOfLastEmployment { get; set; }

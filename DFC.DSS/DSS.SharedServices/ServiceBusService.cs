@@ -2,7 +2,7 @@
 
 namespace DSS.SharedServices
 {
-    public class ServiceBusService: IServiceBusService
+    public class ServiceBusService : IServiceBusService
     {
     }
 }
