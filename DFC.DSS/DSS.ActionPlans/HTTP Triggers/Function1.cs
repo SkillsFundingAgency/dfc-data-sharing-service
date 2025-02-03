@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 using System.Net;
 using System.Text.Json;
 
-namespace DSS.ActionPlans.HTTP_Functions
+namespace DSS.ActionPlans.HTTP_Triggers
 {
     public class Function1
     {
@@ -28,11 +28,11 @@ namespace DSS.ActionPlans.HTTP_Functions
             string databaseName = Environment.GetEnvironmentVariable("actionPlanDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("actionPlanContainerName").ToString();
 
-            ItemResponse<Models.ActionPlan> actionPlanObject = await _cosmos.GenericRetrieveDocument<Models.ActionPlan>(
+            Models.ActionPlan actionPlanObject = await _cosmos.GenericRetrieveDocument<Models.ActionPlan>(
                 req.Headers["ActionPlanId"].ToString(), databaseName, containerName
             );
 
-            return new JsonResult(actionPlanObject.Resource, new JsonSerializerOptions())
+            return new JsonResult(actionPlanObject, new JsonSerializerOptions())
             {
                 StatusCode = (int)HttpStatusCode.OK
             };

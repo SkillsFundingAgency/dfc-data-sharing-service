@@ -28,11 +28,11 @@ namespace DSS.Actions
             string databaseName = Environment.GetEnvironmentVariable("actionDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("actionContainerName").ToString();
 
-            ItemResponse<Models.Action> actionObject = await _cosmos.GenericRetrieveDocument<Models.Action>(
+            Models.Action actionObject = await _cosmos.GenericRetrieveDocument<Models.Action>(
                 req.Headers["ActionId"].ToString(), databaseName, containerName
             );
 
-            return new JsonResult(actionObject.Resource, new JsonSerializerOptions())
+            return new JsonResult(actionObject, new JsonSerializerOptions())
             {
                 StatusCode = (int)HttpStatusCode.OK
             };

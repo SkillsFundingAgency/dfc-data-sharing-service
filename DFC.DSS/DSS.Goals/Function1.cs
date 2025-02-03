@@ -28,11 +28,11 @@ namespace DSS.Goals
             string databaseName = Environment.GetEnvironmentVariable("goalsDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("goalsContainerName").ToString();
 
-            ItemResponse<Models.Goal> goalObject = await _cosmos.GenericRetrieveDocument<Models.Goal>(
+            Models.Goal goalObject = await _cosmos.GenericRetrieveDocument<Models.Goal>(
                 req.Headers["GoalId"].ToString(), databaseName, containerName
             );
 
-            return new JsonResult(goalObject.Resource, new JsonSerializerOptions())
+            return new JsonResult(goalObject, new JsonSerializerOptions())
             {
                 StatusCode = (int)HttpStatusCode.OK
             };

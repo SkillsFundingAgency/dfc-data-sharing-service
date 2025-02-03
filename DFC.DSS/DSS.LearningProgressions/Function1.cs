@@ -28,11 +28,11 @@ namespace DSS.LearningProgressions
             string databaseName = Environment.GetEnvironmentVariable("learningProgressionsDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("learningProgressionsContainerName").ToString();
 
-            ItemResponse<Models.LearningProgression> learningProgressionObject = await _cosmos.GenericRetrieveDocument<Models.LearningProgression>(
+            Models.LearningProgression learningProgressionObject = await _cosmos.GenericRetrieveDocument<Models.LearningProgression>(
                 req.Headers["LearningProgressionId"].ToString(), databaseName, containerName
             );
 
-            return new JsonResult(learningProgressionObject.Resource, new JsonSerializerOptions())
+            return new JsonResult(learningProgressionObject, new JsonSerializerOptions())
             {
                 StatusCode = (int)HttpStatusCode.OK
             };

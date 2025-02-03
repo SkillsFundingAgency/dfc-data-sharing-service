@@ -28,11 +28,11 @@ namespace DSS.Sessions
             string databaseName = Environment.GetEnvironmentVariable("sessionsDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("sessionsContainerName").ToString();
 
-            ItemResponse<Models.Session> sessionObject = await _cosmos.GenericRetrieveDocument<Models.Session>(
+            Models.Session sessionObject = await _cosmos.GenericRetrieveDocument<Models.Session>(
                 req.Headers["SessionId"].ToString(), databaseName, containerName
             );
 
-            return new JsonResult(sessionObject.Resource, new JsonSerializerOptions())
+            return new JsonResult(sessionObject, new JsonSerializerOptions())
             {
                 StatusCode = (int)HttpStatusCode.OK
             };

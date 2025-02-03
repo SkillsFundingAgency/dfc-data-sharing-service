@@ -28,11 +28,11 @@ namespace Customer
             string databaseName = Environment.GetEnvironmentVariable("customerDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("customerContainerName").ToString();
 
-            ItemResponse<DSS.Models.Customer> customerObject = await _cosmos.GenericRetrieveDocument<DSS.Models.Customer>(
+            DSS.Models.Customer customerObject = await _cosmos.GenericRetrieveDocument<DSS.Models.Customer>(
                 req.Headers["CustomerId"].ToString(), databaseName, containerName
             );
 
-            return new JsonResult(customerObject.Resource, new JsonSerializerOptions())
+            return new JsonResult(customerObject, new JsonSerializerOptions())
             {
                 StatusCode = (int)HttpStatusCode.OK
             };

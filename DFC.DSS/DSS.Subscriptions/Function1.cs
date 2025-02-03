@@ -28,11 +28,11 @@ namespace DSS.Subscriptions
             string databaseName = Environment.GetEnvironmentVariable("subscriptionsDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("subscriptionsContainerName").ToString();
 
-            ItemResponse<Models.Subscription> subscriptionObject = await _cosmos.GenericRetrieveDocument<Models.Subscription>(
+            Models.Subscription subscriptionObject = await _cosmos.GenericRetrieveDocument<Models.Subscription>(
                 req.Headers["SubscriptionId"].ToString(), databaseName, containerName
             );
 
-            return new JsonResult(subscriptionObject.Resource, new JsonSerializerOptions())
+            return new JsonResult(subscriptionObject, new JsonSerializerOptions())
             {
                 StatusCode = (int)HttpStatusCode.OK
             };

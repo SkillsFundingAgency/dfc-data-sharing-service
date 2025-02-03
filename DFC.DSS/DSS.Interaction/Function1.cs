@@ -28,11 +28,11 @@ namespace DSS.Interaction
             string databaseName = Environment.GetEnvironmentVariable("interactionDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("interactionContainerName").ToString();
 
-            ItemResponse<Models.Interaction> interactionObject = await _cosmos.GenericRetrieveDocument<Models.Interaction>(
+            Models.Interaction interactionObject = await _cosmos.GenericRetrieveDocument<Models.Interaction>(
                 req.Headers["InteractionId"].ToString(), databaseName, containerName
             );
 
-            return new JsonResult(interactionObject.Resource, new JsonSerializerOptions())
+            return new JsonResult(interactionObject, new JsonSerializerOptions())
             {
                 StatusCode = (int)HttpStatusCode.OK
             };

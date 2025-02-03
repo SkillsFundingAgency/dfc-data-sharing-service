@@ -28,11 +28,11 @@ namespace DSS.Collections
             string databaseName = Environment.GetEnvironmentVariable("collectionsDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("collectionsContainerName").ToString();
 
-            ItemResponse<Models.Collection> collectionObject = await _cosmos.GenericRetrieveDocument<Models.Collection>(
+            Models.Collection collectionObject = await _cosmos.GenericRetrieveDocument<Models.Collection>(
                 req.Headers["CollectionId"].ToString(), databaseName, containerName
             );
 
-            return new JsonResult(collectionObject.Resource, new JsonSerializerOptions())
+            return new JsonResult(collectionObject, new JsonSerializerOptions())
             {
                 StatusCode = (int)HttpStatusCode.OK
             };

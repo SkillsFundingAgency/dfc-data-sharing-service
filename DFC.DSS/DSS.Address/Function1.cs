@@ -28,11 +28,11 @@ namespace DSS.Address
             string databaseName = Environment.GetEnvironmentVariable("addressDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("addressContainerName").ToString();
 
-            ItemResponse<Models.Address> addressObject = await _cosmos.GenericRetrieveDocument<Models.Address>(
+            Models.Address addressObject = await _cosmos.GenericRetrieveDocument<Models.Address>(
                 req.Headers["AddressId"].ToString(), databaseName, containerName
             );
 
-            return new JsonResult(addressObject.Resource, new JsonSerializerOptions())
+            return new JsonResult(addressObject, new JsonSerializerOptions())
             {
                 StatusCode = (int)HttpStatusCode.OK
             };

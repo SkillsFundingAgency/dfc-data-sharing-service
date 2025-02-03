@@ -28,11 +28,11 @@ namespace DSS.WebChats
             string databaseName = Environment.GetEnvironmentVariable("webchatsDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("webchatsContainerName").ToString();
 
-            ItemResponse<Models.WebChat> webchatObject = await _cosmos.GenericRetrieveDocument<Models.WebChat>(
+            Models.WebChat webchatObject = await _cosmos.GenericRetrieveDocument<Models.WebChat>(
                 req.Headers["WebchatId"].ToString(), databaseName, containerName
             );
 
-            return new JsonResult(webchatObject.Resource, new JsonSerializerOptions())
+            return new JsonResult(webchatObject, new JsonSerializerOptions())
             {
                 StatusCode = (int)HttpStatusCode.OK
             };

@@ -28,11 +28,11 @@ namespace DSS.AdviserDetails
             string databaseName = Environment.GetEnvironmentVariable("adviserDetailsDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("adviserDetailsContainerName").ToString();
 
-            ItemResponse<Models.AdviserDetail> adviserDetailObject = await _cosmos.GenericRetrieveDocument<Models.AdviserDetail>(
+            Models.AdviserDetail adviserDetailObject = await _cosmos.GenericRetrieveDocument<Models.AdviserDetail>(
                 req.Headers["AdviserDetailId"].ToString(), databaseName, containerName
             );
 
-            return new JsonResult(adviserDetailObject.Resource, new JsonSerializerOptions())
+            return new JsonResult(adviserDetailObject, new JsonSerializerOptions())
             {
                 StatusCode = (int)HttpStatusCode.OK
             };

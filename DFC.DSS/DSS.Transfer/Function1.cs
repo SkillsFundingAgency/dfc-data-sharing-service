@@ -28,11 +28,11 @@ namespace DSS.Transfer
             string databaseName = Environment.GetEnvironmentVariable("transfersDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("transfersContainerName").ToString();
 
-            ItemResponse<Models.Transfer> transferObject = await _cosmos.GenericRetrieveDocument<Models.Transfer>(
+            Models.Transfer transferObject = await _cosmos.GenericRetrieveDocument<Models.Transfer>(
                 req.Headers["TransferId"].ToString(), databaseName, containerName
             );
 
-            return new JsonResult(transferObject.Resource, new JsonSerializerOptions())
+            return new JsonResult(transferObject, new JsonSerializerOptions())
             {
                 StatusCode = (int)HttpStatusCode.OK
             };

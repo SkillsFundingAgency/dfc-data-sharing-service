@@ -28,11 +28,11 @@ namespace DSS.Contact
             string databaseName = Environment.GetEnvironmentVariable("contactDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("contactContainerName").ToString();
 
-            ItemResponse<Models.Contact> contactObject = await _cosmos.GenericRetrieveDocument<Models.Contact>(
+            Models.Contact contactObject = await _cosmos.GenericRetrieveDocument<Models.Contact>(
                 req.Headers["ContactId"].ToString(), databaseName, containerName
             );
 
-            return new JsonResult(contactObject.Resource, new JsonSerializerOptions())
+            return new JsonResult(contactObject, new JsonSerializerOptions())
             {
                 StatusCode = (int)HttpStatusCode.OK
             };

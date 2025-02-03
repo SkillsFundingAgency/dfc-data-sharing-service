@@ -28,11 +28,11 @@ namespace DSS.EmploymentProgressions
             string databaseName = Environment.GetEnvironmentVariable("employmentProgressionsDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("employmentProgressionsContainerName").ToString();
 
-            ItemResponse<Models.EmploymentProgression> employmentProgressionObject = await _cosmos.GenericRetrieveDocument<Models.EmploymentProgression>(
+            Models.EmploymentProgression employmentProgressionObject = await _cosmos.GenericRetrieveDocument<Models.EmploymentProgression>(
                 req.Headers["EmploymentProgressionId"].ToString(), databaseName, containerName
             );
 
-            return new JsonResult(employmentProgressionObject.Resource, new JsonSerializerOptions())
+            return new JsonResult(employmentProgressionObject, new JsonSerializerOptions())
             {
                 StatusCode = (int)HttpStatusCode.OK
             };

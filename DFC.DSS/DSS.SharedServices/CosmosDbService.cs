@@ -1,6 +1,7 @@
 ﻿using DSS.Interfaces;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace DSS.SharedServices
 {
@@ -15,36 +16,44 @@ namespace DSS.SharedServices
             _logger = logger;
         }
 
-        // This one will retrieve a generic item using the 'T' decorator
-        public async Task<ItemResponse<T>> GenericRetrieveDocument<T>(string documentId, string databaseName, string containerName)
+        public async Task<T> GenericRetrieveDocument<T>(string documentId, string databaseName, string containerName)
         {
-            _logger.LogInformation($"{nameof(GenericRetrieveDocument)} function has been invoked");
+            _logger.LogInformation($"Method '{nameof(GenericRetrieveDocument)}' has been invoked");
+            _logger.LogInformation($"Attempting to retrieve container '{containerName}' from database '{databaseName}'");
+
             Container cosmosDbNotificationContainer = _cosmosDbClient.GetContainer(databaseName, containerName);
 
-            _logger.LogInformation("Attempting to retrieve an existing document from Cosmos DB");
+            _logger.LogInformation($"Attempting to retrieve document with ID '{documentId}' from Cosmos DB");
 
-            ItemResponse<T> createRequestResponse = await cosmosDbNotificationContainer.ReadItemAsync<T>(documentId, PartitionKey.None);
+            using (ResponseMessage response = await cosmosDbNotificationContainer.ReadItemStreamAsync(documentId, PartitionKey.None))
+            {
+                _logger.LogInformation($"Status code returned was '{((int)response.StatusCode)} - {response.StatusCode}'");
 
-            _logger.LogInformation($"{nameof(GenericRetrieveDocument)} function has finished invocation");
+                if (!response.IsSuccessStatusCode)
+                {
+                    _logger.LogWarning($"No document with ID '{documentId}' could be found within Cosmos DB");
+                    LogMethodExit(nameof(GenericRetrieveDocument).ToString());
+                    return default;
+                }
 
-            return createRequestResponse;
+                string content;
+                using (StreamReader streamReader = new StreamReader(response.Content))
+                {
+                    content = await streamReader.ReadToEndAsync();
+                }
+
+                _logger.LogInformation($"A document with ID '{documentId}' was found within Cosmos DB");
+                LogMethodExit(nameof(GenericRetrieveDocument).ToString());
+                return JsonConvert.DeserializeObject<T>(content);
+            }
         }
 
-        /*public async Task<ItemResponse<Notification>> GetNotificationDocument(string documentId, string databaseName, string containerName)
+        private void LogMethodExit(string nameOfMethod)
         {
-            _logger.LogInformation($"{nameof(GetNotificationDocument)} function has been invoked");
-            Container cosmosDbNotificationContainer = _cosmosDbClient.GetContainer(databaseName, containerName);
-
-            _logger.LogInformation("Attempting to retrieve an existing document from Cosmos DB");
-
-            ItemResponse<Notification> createRequestResponse = await cosmosDbNotificationContainer.ReadItemAsync<Notification>(documentId, PartitionKey.None);
-
-            _logger.LogInformation($"{nameof(GetNotificationDocument)} function has finished invocation");
-
-            return createRequestResponse;
+            _logger.LogInformation($"Method '{nameOfMethod}' has finished invocation");
         }
 
-        public async Task<ItemResponse<Notification>> CreateNewNotificationDocument(string databaseName, string containerName)
+        /* public async Task<ItemResponse<Notification>> CreateNewNotificationDocument(string databaseName, string containerName)
         {
             Notification newDoc = new Notification()
             {

@@ -28,11 +28,11 @@ namespace DSS.DiversityDetails
             string databaseName = Environment.GetEnvironmentVariable("diversityDetailsDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("diversityDetailsContainerName").ToString();
 
-            ItemResponse<Models.DiversityDetail> diversityDetailObject = await _cosmos.GenericRetrieveDocument<Models.DiversityDetail>(
+            Models.DiversityDetail diversityDetailObject = await _cosmos.GenericRetrieveDocument<Models.DiversityDetail>(
                 req.Headers["DiversityDetailId"].ToString(), databaseName, containerName
             );
 
-            return new JsonResult(diversityDetailObject.Resource, new JsonSerializerOptions())
+            return new JsonResult(diversityDetailObject, new JsonSerializerOptions())
             {
                 StatusCode = (int)HttpStatusCode.OK
             };

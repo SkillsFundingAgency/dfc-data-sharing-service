@@ -28,11 +28,11 @@ namespace DSS.NotificationListener
             string databaseName = Environment.GetEnvironmentVariable("notificationDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("notificationContainerName").ToString();
 
-            ItemResponse<Models.Notification> notificationObject = await _cosmos.GenericRetrieveDocument<Models.Notification>(
+            Models.Notification notificationObject = await _cosmos.GenericRetrieveDocument<Models.Notification>(
                 req.Headers["NotificationId"].ToString(), databaseName, containerName
             );
 
-            return new JsonResult(notificationObject.Resource, new JsonSerializerOptions())
+            return new JsonResult(notificationObject, new JsonSerializerOptions())
             {
                 StatusCode = (int)HttpStatusCode.OK
             };
