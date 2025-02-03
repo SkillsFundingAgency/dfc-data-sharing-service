@@ -1,10 +1,10 @@
-﻿using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 
 namespace DSS.Models
 {
     public class AdviserDetail
     {
-        [Newtonsoft.Json.JsonProperty(PropertyName = "id")]
+        [JsonProperty(PropertyName = "id")]
         public Guid? AdviserDetailId { get; set; }
 
         public string AdviserName { get; set; }

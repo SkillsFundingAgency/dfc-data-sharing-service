@@ -1,10 +1,11 @@
 ﻿using DSS.Models.Enums;
+using Newtonsoft.Json;
 
 namespace DSS.Models
 {
     public class Contact
     {
-        [Newtonsoft.Json.JsonProperty(PropertyName = "id")]
+        [JsonProperty(PropertyName = "id")]
         public Guid? ContactId { get; set; }
 
         public Guid? CustomerId { get; set; }
