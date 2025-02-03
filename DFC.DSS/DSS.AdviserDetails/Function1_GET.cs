@@ -8,12 +8,12 @@ using System.Text.Json;
 
 namespace DSS.AdviserDetails
 {
-    public class Function1
+    public class Function1_GET
     {
-        private readonly ILogger<Function1> _logger;
+        private readonly ILogger<Function1_GET> _logger;
         private readonly ICosmosDbService _cosmos;
 
-        public Function1(ILogger<Function1> logger, ICosmosDbService cosmos)
+        public Function1_GET(ILogger<Function1_GET> logger, ICosmosDbService cosmos)
         {
             _logger = logger;
             _cosmos = cosmos;
