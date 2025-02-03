@@ -1,0 +1,33 @@
+﻿using System.ComponentModel;
+
+namespace DSS.Models.Enums
+{
+    public enum Channel
+    {
+        [Description("Face to face")]
+        FaceToFace = 1,
+        
+        Telephone = 2,
+        
+        Webchat = 3,
+        
+        Videochat = 4,
+        
+        Email = 5,
+        
+        [Description("Social media")]
+        SocialMedia = 6,
+        
+        SMS = 7,
+        
+        Post = 8,
+        
+        [Description("Co-browse")]
+        Cobrowse = 9,
+        
+        [Description("Messaging application e.g. WhatsApp")]
+        MessagingApplication = 10,
+        
+        Other = 99
+    }
+}
