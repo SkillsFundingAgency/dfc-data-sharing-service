@@ -11,9 +11,9 @@ namespace DSS.NotificationListener
     public class Function1
     {
         private readonly ILogger<Function1> _logger;
-        private readonly ICosmosDbService _cosmos;
+        private readonly IGenericCosmosDbService _cosmos;
 
-        public Function1(ILogger<Function1> logger, ICosmosDbService cosmos)
+        public Function1(ILogger<Function1> logger, IGenericCosmosDbService cosmos)
         {
             _logger = logger;
             _cosmos = cosmos;
@@ -27,7 +27,7 @@ namespace DSS.NotificationListener
             string databaseName = Environment.GetEnvironmentVariable("notificationDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("notificationContainerName").ToString();
 
-            Models.Notification notificationObject = await _cosmos.GenericRetrieveDocumentAsync<Models.Notification>(
+            Models.Notification notificationObject = await _cosmos.RetrieveDocumentAsync<Models.Notification>(
                 req.Headers["NotificationId"].ToString(), databaseName, containerName
             );
 

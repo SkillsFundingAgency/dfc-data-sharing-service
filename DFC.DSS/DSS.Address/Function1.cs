@@ -11,9 +11,9 @@ namespace DSS.Address
     public class Function1
     {
         private readonly ILogger<Function1> _logger;
-        private readonly ICosmosDbService _cosmos;
+        private readonly IGenericCosmosDbService _cosmos;
 
-        public Function1(ILogger<Function1> logger, ICosmosDbService cosmos)
+        public Function1(ILogger<Function1> logger, IGenericCosmosDbService cosmos)
         {
             _logger = logger;
             _cosmos = cosmos;
@@ -27,7 +27,7 @@ namespace DSS.Address
             string databaseName = Environment.GetEnvironmentVariable("addressDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("addressContainerName").ToString();
 
-            Models.Address addressObject = await _cosmos.GenericRetrieveDocumentAsync<Models.Address>(
+            Models.Address addressObject = await _cosmos.RetrieveDocumentAsync<Models.Address>(
                 req.Headers["AddressId"].ToString(), databaseName, containerName
             );
 

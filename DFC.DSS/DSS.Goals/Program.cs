@@ -17,7 +17,7 @@ namespace DSS.Goals
                {
                    services.AddApplicationInsightsTelemetryWorkerService();
                    services.ConfigureFunctionsApplicationInsights();
-                   services.AddSingleton<ICosmosDbService, CosmosDbService>();
+                   services.AddSingleton<IGenericCosmosDbService, GenericCosmosDbService>();
                    services.AddSingleton(sp =>
                    {
                        var options = new CosmosClientOptions()

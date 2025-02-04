@@ -11,9 +11,9 @@ namespace DSS.AdviserDetails
     public class Function2_POST
     {
         private readonly ILogger<Function2_POST> _logger;
-        private readonly ICosmosDbService _cosmos;
+        private readonly IGenericCosmosDbService _cosmos;
 
-        public Function2_POST(ILogger<Function2_POST> logger, ICosmosDbService cosmos)
+        public Function2_POST(ILogger<Function2_POST> logger, IGenericCosmosDbService cosmos)
         {
             _logger = logger;
             _cosmos = cosmos;
@@ -37,7 +37,7 @@ namespace DSS.AdviserDetails
                 CreatedBy = "<TOUCHPOINT>"
             };
 
-            Models.AdviserDetail adviserDetailObject = await _cosmos.GenericCreateDocumentAsync<Models.AdviserDetail>(
+            Models.AdviserDetail adviserDetailObject = await _cosmos.CreateDocumentAsync<Models.AdviserDetail>(
                 newAdviserDetail, databaseName, containerName
             );
 

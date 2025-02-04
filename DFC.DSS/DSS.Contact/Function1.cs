@@ -11,9 +11,9 @@ namespace DSS.Contact
     public class Function1
     {
         private readonly ILogger<Function1> _logger;
-        private readonly ICosmosDbService _cosmos;
+        private readonly IGenericCosmosDbService _cosmos;
 
-        public Function1(ILogger<Function1> logger, ICosmosDbService cosmos)
+        public Function1(ILogger<Function1> logger, IGenericCosmosDbService cosmos)
         {
             _logger = logger;
             _cosmos = cosmos;
@@ -27,7 +27,7 @@ namespace DSS.Contact
             string databaseName = Environment.GetEnvironmentVariable("contactDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("contactContainerName").ToString();
 
-            Models.Contact contactObject = await _cosmos.GenericRetrieveDocumentAsync<Models.Contact>(
+            Models.Contact contactObject = await _cosmos.RetrieveDocumentAsync<Models.Contact>(
                 req.Headers["ContactId"].ToString(), databaseName, containerName
             );
 

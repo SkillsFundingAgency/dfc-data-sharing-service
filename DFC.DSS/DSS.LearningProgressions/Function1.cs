@@ -11,9 +11,9 @@ namespace DSS.LearningProgressions
     public class Function1
     {
         private readonly ILogger<Function1> _logger;
-        private readonly ICosmosDbService _cosmos;
+        private readonly IGenericCosmosDbService _cosmos;
 
-        public Function1(ILogger<Function1> logger, ICosmosDbService cosmos)
+        public Function1(ILogger<Function1> logger, IGenericCosmosDbService cosmos)
         {
             _logger = logger;
             _cosmos = cosmos;
@@ -27,7 +27,7 @@ namespace DSS.LearningProgressions
             string databaseName = Environment.GetEnvironmentVariable("learningProgressionsDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("learningProgressionsContainerName").ToString();
 
-            Models.LearningProgression learningProgressionObject = await _cosmos.GenericRetrieveDocumentAsync<Models.LearningProgression>(
+            Models.LearningProgression learningProgressionObject = await _cosmos.RetrieveDocumentAsync<Models.LearningProgression>(
                 req.Headers["LearningProgressionId"].ToString(), databaseName, containerName
             );
 

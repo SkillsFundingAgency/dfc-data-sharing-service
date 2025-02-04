@@ -11,9 +11,9 @@ namespace DSS.Outcome
     public class Function1
     {
         private readonly ILogger<Function1> _logger;
-        private readonly ICosmosDbService _cosmos;
+        private readonly IGenericCosmosDbService _cosmos;
 
-        public Function1(ILogger<Function1> logger, ICosmosDbService cosmos)
+        public Function1(ILogger<Function1> logger, IGenericCosmosDbService cosmos)
         {
             _logger = logger;
             _cosmos = cosmos;
@@ -27,7 +27,7 @@ namespace DSS.Outcome
             string databaseName = Environment.GetEnvironmentVariable("outcomesDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("outcomesContainerName").ToString();
 
-            Models.Outcome outcomeObject = await _cosmos.GenericRetrieveDocumentAsync<Models.Outcome>(
+            Models.Outcome outcomeObject = await _cosmos.RetrieveDocumentAsync<Models.Outcome>(
                 req.Headers["OutcomeId"].ToString(), databaseName, containerName
             );
 

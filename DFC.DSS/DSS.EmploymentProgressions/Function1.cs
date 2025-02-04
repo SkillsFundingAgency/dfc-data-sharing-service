@@ -11,9 +11,9 @@ namespace DSS.EmploymentProgressions
     public class Function1
     {
         private readonly ILogger<Function1> _logger;
-        private readonly ICosmosDbService _cosmos;
+        private readonly IGenericCosmosDbService _cosmos;
 
-        public Function1(ILogger<Function1> logger, ICosmosDbService cosmos)
+        public Function1(ILogger<Function1> logger, IGenericCosmosDbService cosmos)
         {
             _logger = logger;
             _cosmos = cosmos;
@@ -27,7 +27,7 @@ namespace DSS.EmploymentProgressions
             string databaseName = Environment.GetEnvironmentVariable("employmentProgressionsDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("employmentProgressionsContainerName").ToString();
 
-            Models.EmploymentProgression employmentProgressionObject = await _cosmos.GenericRetrieveDocumentAsync<Models.EmploymentProgression>(
+            Models.EmploymentProgression employmentProgressionObject = await _cosmos.RetrieveDocumentAsync<Models.EmploymentProgression>(
                 req.Headers["EmploymentProgressionId"].ToString(), databaseName, containerName
             );
 

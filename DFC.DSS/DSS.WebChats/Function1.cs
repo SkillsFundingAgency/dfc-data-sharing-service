@@ -11,9 +11,9 @@ namespace DSS.WebChats
     public class Function1
     {
         private readonly ILogger<Function1> _logger;
-        private readonly ICosmosDbService _cosmos;
+        private readonly IGenericCosmosDbService _cosmos;
 
-        public Function1(ILogger<Function1> logger, ICosmosDbService cosmos)
+        public Function1(ILogger<Function1> logger, IGenericCosmosDbService cosmos)
         {
             _logger = logger;
             _cosmos = cosmos;
@@ -27,7 +27,7 @@ namespace DSS.WebChats
             string databaseName = Environment.GetEnvironmentVariable("webchatsDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("webchatsContainerName").ToString();
 
-            Models.WebChat webchatObject = await _cosmos.GenericRetrieveDocumentAsync<Models.WebChat>(
+            Models.WebChat webchatObject = await _cosmos.RetrieveDocumentAsync<Models.WebChat>(
                 req.Headers["WebchatId"].ToString(), databaseName, containerName
             );
 

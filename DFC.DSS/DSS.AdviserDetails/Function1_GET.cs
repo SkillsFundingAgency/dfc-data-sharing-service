@@ -11,9 +11,9 @@ namespace DSS.AdviserDetails
     public class Function1_GET
     {
         private readonly ILogger<Function1_GET> _logger;
-        private readonly ICosmosDbService _cosmos;
+        private readonly IGenericCosmosDbService _cosmos;
 
-        public Function1_GET(ILogger<Function1_GET> logger, ICosmosDbService cosmos)
+        public Function1_GET(ILogger<Function1_GET> logger, IGenericCosmosDbService cosmos)
         {
             _logger = logger;
             _cosmos = cosmos;
@@ -27,7 +27,7 @@ namespace DSS.AdviserDetails
             string databaseName = Environment.GetEnvironmentVariable("adviserDetailsDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("adviserDetailsContainerName").ToString();
 
-            Models.AdviserDetail adviserDetailObject = await _cosmos.GenericRetrieveDocumentAsync<Models.AdviserDetail>(
+            Models.AdviserDetail adviserDetailObject = await _cosmos.RetrieveDocumentAsync<Models.AdviserDetail>(
                 req.Headers["AdviserDetailId"].ToString(), databaseName, containerName
             );
 

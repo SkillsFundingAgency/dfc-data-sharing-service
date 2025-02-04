@@ -11,9 +11,9 @@ namespace DSS.AdviserDetails
     public class Function3_PATCH
     {
         private readonly ILogger<Function3_PATCH> _logger;
-        private readonly ICosmosDbService _cosmos;
+        private readonly IGenericCosmosDbService _cosmos;
 
-        public Function3_PATCH(ILogger<Function3_PATCH> logger, ICosmosDbService cosmos)
+        public Function3_PATCH(ILogger<Function3_PATCH> logger, IGenericCosmosDbService cosmos)
         {
             _logger = logger;
             _cosmos = cosmos;
@@ -40,7 +40,7 @@ namespace DSS.AdviserDetails
                 CreatedBy = "<REPLACE>"
             };
             
-            Models.AdviserDetail adviserDetailObject = await _cosmos.GenericReplaceDocumentAsync<Models.AdviserDetail>(
+            Models.AdviserDetail adviserDetailObject = await _cosmos.ReplaceDocumentAsync<Models.AdviserDetail>(
                 updatedAdviserDetail, existingDocumentId, databaseName, containerName
             );
 

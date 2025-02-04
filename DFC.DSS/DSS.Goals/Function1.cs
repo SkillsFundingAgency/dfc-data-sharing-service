@@ -11,9 +11,9 @@ namespace DSS.Goals
     public class Function1
     {
         private readonly ILogger<Function1> _logger;
-        private readonly ICosmosDbService _cosmos;
+        private readonly IGenericCosmosDbService _cosmos;
 
-        public Function1(ILogger<Function1> logger, ICosmosDbService cosmos)
+        public Function1(ILogger<Function1> logger, IGenericCosmosDbService cosmos)
         {
             _logger = logger;
             _cosmos = cosmos;
@@ -27,7 +27,7 @@ namespace DSS.Goals
             string databaseName = Environment.GetEnvironmentVariable("goalsDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("goalsContainerName").ToString();
 
-            Models.Goal goalObject = await _cosmos.GenericRetrieveDocumentAsync<Models.Goal>(
+            Models.Goal goalObject = await _cosmos.RetrieveDocumentAsync<Models.Goal>(
                 req.Headers["GoalId"].ToString(), databaseName, containerName
             );
 

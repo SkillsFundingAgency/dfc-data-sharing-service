@@ -11,9 +11,9 @@ namespace DSS.Interaction
     public class Function1
     {
         private readonly ILogger<Function1> _logger;
-        private readonly ICosmosDbService _cosmos;
+        private readonly IGenericCosmosDbService _cosmos;
 
-        public Function1(ILogger<Function1> logger, ICosmosDbService cosmos)
+        public Function1(ILogger<Function1> logger, IGenericCosmosDbService cosmos)
         {
             _logger = logger;
             _cosmos = cosmos;
@@ -27,7 +27,7 @@ namespace DSS.Interaction
             string databaseName = Environment.GetEnvironmentVariable("interactionDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("interactionContainerName").ToString();
 
-            Models.Interaction interactionObject = await _cosmos.GenericRetrieveDocumentAsync<Models.Interaction>(
+            Models.Interaction interactionObject = await _cosmos.RetrieveDocumentAsync<Models.Interaction>(
                 req.Headers["InteractionId"].ToString(), databaseName, containerName
             );
 

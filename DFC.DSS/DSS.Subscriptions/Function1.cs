@@ -11,9 +11,9 @@ namespace DSS.Subscriptions
     public class Function1
     {
         private readonly ILogger<Function1> _logger;
-        private readonly ICosmosDbService _cosmos;
+        private readonly IGenericCosmosDbService _cosmos;
 
-        public Function1(ILogger<Function1> logger, ICosmosDbService cosmos)
+        public Function1(ILogger<Function1> logger, IGenericCosmosDbService cosmos)
         {
             _logger = logger;
             _cosmos = cosmos;
@@ -27,7 +27,7 @@ namespace DSS.Subscriptions
             string databaseName = Environment.GetEnvironmentVariable("subscriptionsDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("subscriptionsContainerName").ToString();
 
-            Models.Subscription subscriptionObject = await _cosmos.GenericRetrieveDocumentAsync<Models.Subscription>(
+            Models.Subscription subscriptionObject = await _cosmos.RetrieveDocumentAsync<Models.Subscription>(
                 req.Headers["SubscriptionId"].ToString(), databaseName, containerName
             );
 

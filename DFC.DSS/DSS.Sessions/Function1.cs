@@ -11,9 +11,9 @@ namespace DSS.Sessions
     public class Function1
     {
         private readonly ILogger<Function1> _logger;
-        private readonly ICosmosDbService _cosmos;
+        private readonly IGenericCosmosDbService _cosmos;
 
-        public Function1(ILogger<Function1> logger, ICosmosDbService cosmos)
+        public Function1(ILogger<Function1> logger, IGenericCosmosDbService cosmos)
         {
             _logger = logger;
             _cosmos = cosmos;
@@ -27,7 +27,7 @@ namespace DSS.Sessions
             string databaseName = Environment.GetEnvironmentVariable("sessionsDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("sessionsContainerName").ToString();
 
-            Models.Session sessionObject = await _cosmos.GenericRetrieveDocumentAsync<Models.Session>(
+            Models.Session sessionObject = await _cosmos.RetrieveDocumentAsync<Models.Session>(
                 req.Headers["SessionId"].ToString(), databaseName, containerName
             );
 

@@ -11,9 +11,9 @@ namespace DSS.DiversityDetails
     public class Function1
     {
         private readonly ILogger<Function1> _logger;
-        private readonly ICosmosDbService _cosmos;
+        private readonly IGenericCosmosDbService _cosmos;
 
-        public Function1(ILogger<Function1> logger, ICosmosDbService cosmos)
+        public Function1(ILogger<Function1> logger, IGenericCosmosDbService cosmos)
         {
             _logger = logger;
             _cosmos = cosmos;
@@ -27,7 +27,7 @@ namespace DSS.DiversityDetails
             string databaseName = Environment.GetEnvironmentVariable("diversityDetailsDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("diversityDetailsContainerName").ToString();
 
-            Models.DiversityDetail diversityDetailObject = await _cosmos.GenericRetrieveDocumentAsync<Models.DiversityDetail>(
+            Models.DiversityDetail diversityDetailObject = await _cosmos.RetrieveDocumentAsync<Models.DiversityDetail>(
                 req.Headers["DiversityDetailId"].ToString(), databaseName, containerName
             );
 

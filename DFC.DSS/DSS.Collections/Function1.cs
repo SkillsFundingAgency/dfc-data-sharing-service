@@ -11,9 +11,9 @@ namespace DSS.Collections
     public class Function1
     {
         private readonly ILogger<Function1> _logger;
-        private readonly ICosmosDbService _cosmos;
+        private readonly IGenericCosmosDbService _cosmos;
 
-        public Function1(ILogger<Function1> logger, ICosmosDbService cosmos)
+        public Function1(ILogger<Function1> logger, IGenericCosmosDbService cosmos)
         {
             _logger = logger;
             _cosmos = cosmos;
@@ -27,7 +27,7 @@ namespace DSS.Collections
             string databaseName = Environment.GetEnvironmentVariable("collectionsDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("collectionsContainerName").ToString();
 
-            Models.Collection collectionObject = await _cosmos.GenericRetrieveDocumentAsync<Models.Collection>(
+            Models.Collection collectionObject = await _cosmos.RetrieveDocumentAsync<Models.Collection>(
                 req.Headers["CollectionId"].ToString(), databaseName, containerName
             );
 

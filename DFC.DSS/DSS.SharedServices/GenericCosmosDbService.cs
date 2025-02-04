@@ -5,22 +5,22 @@ using Newtonsoft.Json;
 
 namespace DSS.SharedServices
 {
-    public class CosmosDbService : ICosmosDbService
+    public class GenericCosmosDbService : IGenericCosmosDbService
     {
         private readonly CosmosClient _cosmosDbClient;
-        private readonly ILogger<CosmosDbService> _logger;
+        private readonly ILogger<GenericCosmosDbService> _logger;
         private readonly ILogService _logService;
 
-        public CosmosDbService(CosmosClient cosmosClient, ILogger<CosmosDbService> logger, ILogService logService)
+        public GenericCosmosDbService(CosmosClient cosmosClient, ILogger<GenericCosmosDbService> logger, ILogService logService)
         {
             _cosmosDbClient = cosmosClient;
             _logger = logger;
             _logService = logService;
         }
 
-        public async Task<T> GenericRetrieveDocumentAsync<T>(string documentId, string databaseName, string containerName)
+        public async Task<T> RetrieveDocumentAsync<T>(string documentId, string databaseName, string containerName)
         {
-            _logger.LogInformation($"Method '{nameof(GenericRetrieveDocumentAsync)}' has been invoked");
+            _logger.LogInformation($"Method '{nameof(RetrieveDocumentAsync)}' has been invoked");
             _logger.LogInformation($"Attempting to retrieve container '{containerName}' from database '{databaseName}'");
 
             Container cosmosDbContainer = _cosmosDbClient.GetContainer(databaseName, containerName);
@@ -34,7 +34,7 @@ namespace DSS.SharedServices
                 if (!response.IsSuccessStatusCode)
                 {
                     _logger.LogWarning($"No document with ID '{documentId}' could be found within Cosmos DB");
-                    _logService.LogMethodExit(nameof(GenericRetrieveDocumentAsync).ToString());
+                    _logService.LogMethodExit(nameof(RetrieveDocumentAsync).ToString());
                     return default;
                 }
 
@@ -45,14 +45,14 @@ namespace DSS.SharedServices
                 }
 
                 _logger.LogInformation($"A document with ID '{documentId}' was found within Cosmos DB");
-                _logService.LogMethodExit(nameof(GenericRetrieveDocumentAsync).ToString());
+                _logService.LogMethodExit(nameof(RetrieveDocumentAsync).ToString());
                 return JsonConvert.DeserializeObject<T>(content);
             }
         }
 
-        public async Task<T> GenericCreateDocumentAsync<T>(T newDocumentObject, string databaseName, string containerName)
+        public async Task<T> CreateDocumentAsync<T>(T newDocumentObject, string databaseName, string containerName)
         {
-            _logger.LogInformation($"Method '{nameof(GenericCreateDocumentAsync)}' has been invoked");
+            _logger.LogInformation($"Method '{nameof(CreateDocumentAsync)}' has been invoked");
             _logger.LogInformation($"Attempting to retrieve container '{containerName}' from database '{databaseName}'");
 
             Container cosmosDbContainer = _cosmosDbClient.GetContainer(databaseName, containerName);
@@ -71,7 +71,7 @@ namespace DSS.SharedServices
                 if (!response.IsSuccessStatusCode)
                 {
                     _logger.LogWarning($"Unable to create document within Cosmos DB");
-                    _logService.LogMethodExit(nameof(GenericCreateDocumentAsync).ToString());
+                    _logService.LogMethodExit(nameof(CreateDocumentAsync).ToString());
                     return default;
                 }
 
@@ -81,14 +81,14 @@ namespace DSS.SharedServices
                     content = await streamReader.ReadToEndAsync();
                 }
 
-                _logService.LogMethodExit(nameof(GenericCreateDocumentAsync).ToString());
+                _logService.LogMethodExit(nameof(CreateDocumentAsync).ToString());
                 return JsonConvert.DeserializeObject<T>(content);
             }
         }
 
-        public async Task<T> GenericReplaceDocumentAsync<T>(T updatedDocumentObject, string existingDocumentId, string databaseName, string containerName)
+        public async Task<T> ReplaceDocumentAsync<T>(T updatedDocumentObject, string existingDocumentId, string databaseName, string containerName)
         {
-            _logger.LogInformation($"Method '{nameof(GenericReplaceDocumentAsync)}' has been invoked");
+            _logger.LogInformation($"Method '{nameof(ReplaceDocumentAsync)}' has been invoked");
             _logger.LogInformation($"Attempting to retrieve container '{containerName}' from database '{databaseName}'");
 
             Container cosmosDbContainer = _cosmosDbClient.GetContainer(databaseName, containerName);
@@ -107,7 +107,7 @@ namespace DSS.SharedServices
                 if (!response.IsSuccessStatusCode)
                 {
                     _logger.LogWarning($"Unable to replace document within Cosmos DB");
-                    _logService.LogMethodExit(nameof(GenericReplaceDocumentAsync).ToString());
+                    _logService.LogMethodExit(nameof(ReplaceDocumentAsync).ToString());
                     return default;
                 }
 
@@ -118,7 +118,7 @@ namespace DSS.SharedServices
                 }
 
                 _logger.LogInformation($"Document with ID '{existingDocumentId}' was replaced successfully");
-                _logService.LogMethodExit(nameof(GenericReplaceDocumentAsync).ToString());
+                _logService.LogMethodExit(nameof(ReplaceDocumentAsync).ToString());
                 return JsonConvert.DeserializeObject<T>(content);
             }
         }

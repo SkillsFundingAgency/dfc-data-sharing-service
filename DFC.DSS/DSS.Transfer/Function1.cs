@@ -11,9 +11,9 @@ namespace DSS.Transfer
     public class Function1
     {
         private readonly ILogger<Function1> _logger;
-        private readonly ICosmosDbService _cosmos;
+        private readonly IGenericCosmosDbService _cosmos;
 
-        public Function1(ILogger<Function1> logger, ICosmosDbService cosmos)
+        public Function1(ILogger<Function1> logger, IGenericCosmosDbService cosmos)
         {
             _logger = logger;
             _cosmos = cosmos;
@@ -27,7 +27,7 @@ namespace DSS.Transfer
             string databaseName = Environment.GetEnvironmentVariable("transfersDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("transfersContainerName").ToString();
 
-            Models.Transfer transferObject = await _cosmos.GenericRetrieveDocumentAsync<Models.Transfer>(
+            Models.Transfer transferObject = await _cosmos.RetrieveDocumentAsync<Models.Transfer>(
                 req.Headers["TransferId"].ToString(), databaseName, containerName
             );
 
