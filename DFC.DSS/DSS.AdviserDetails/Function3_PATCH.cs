@@ -40,7 +40,7 @@ namespace DSS.AdviserDetails
                 CreatedBy = "<REPLACE>"
             };
             
-            Models.AdviserDetail adviserDetailObject = await _cosmos.GenericReplaceDocument<Models.AdviserDetail>(
+            Models.AdviserDetail adviserDetailObject = await _cosmos.GenericReplaceDocumentAsync<Models.AdviserDetail>(
                 updatedAdviserDetail, existingDocumentId, databaseName, containerName
             );
 

@@ -27,7 +27,7 @@ namespace DSS.WebChats
             string databaseName = Environment.GetEnvironmentVariable("webchatsDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("webchatsContainerName").ToString();
 
-            Models.WebChat webchatObject = await _cosmos.GenericRetrieveDocument<Models.WebChat>(
+            Models.WebChat webchatObject = await _cosmos.GenericRetrieveDocumentAsync<Models.WebChat>(
                 req.Headers["WebchatId"].ToString(), databaseName, containerName
             );
 

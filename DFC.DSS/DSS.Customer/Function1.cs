@@ -27,7 +27,7 @@ namespace Customer
             string databaseName = Environment.GetEnvironmentVariable("customerDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("customerContainerName").ToString();
 
-            DSS.Models.Customer customerObject = await _cosmos.GenericRetrieveDocument<DSS.Models.Customer>(
+            DSS.Models.Customer customerObject = await _cosmos.GenericRetrieveDocumentAsync<DSS.Models.Customer>(
                 req.Headers["CustomerId"].ToString(), databaseName, containerName
             );
 

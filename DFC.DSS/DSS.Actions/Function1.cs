@@ -27,7 +27,7 @@ namespace DSS.Actions
             string databaseName = Environment.GetEnvironmentVariable("actionDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("actionContainerName").ToString();
 
-            Models.Action actionObject = await _cosmos.GenericRetrieveDocument<Models.Action>(
+            Models.Action actionObject = await _cosmos.GenericRetrieveDocumentAsync<Models.Action>(
                 req.Headers["ActionId"].ToString(), databaseName, containerName
             );
 

@@ -27,7 +27,7 @@ namespace DSS.Subscriptions
             string databaseName = Environment.GetEnvironmentVariable("subscriptionsDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("subscriptionsContainerName").ToString();
 
-            Models.Subscription subscriptionObject = await _cosmos.GenericRetrieveDocument<Models.Subscription>(
+            Models.Subscription subscriptionObject = await _cosmos.GenericRetrieveDocumentAsync<Models.Subscription>(
                 req.Headers["SubscriptionId"].ToString(), databaseName, containerName
             );
 

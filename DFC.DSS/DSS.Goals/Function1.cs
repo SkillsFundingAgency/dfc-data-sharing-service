@@ -27,7 +27,7 @@ namespace DSS.Goals
             string databaseName = Environment.GetEnvironmentVariable("goalsDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("goalsContainerName").ToString();
 
-            Models.Goal goalObject = await _cosmos.GenericRetrieveDocument<Models.Goal>(
+            Models.Goal goalObject = await _cosmos.GenericRetrieveDocumentAsync<Models.Goal>(
                 req.Headers["GoalId"].ToString(), databaseName, containerName
             );
 

@@ -27,7 +27,7 @@ namespace DSS.LearningProgressions
             string databaseName = Environment.GetEnvironmentVariable("learningProgressionsDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("learningProgressionsContainerName").ToString();
 
-            Models.LearningProgression learningProgressionObject = await _cosmos.GenericRetrieveDocument<Models.LearningProgression>(
+            Models.LearningProgression learningProgressionObject = await _cosmos.GenericRetrieveDocumentAsync<Models.LearningProgression>(
                 req.Headers["LearningProgressionId"].ToString(), databaseName, containerName
             );
 

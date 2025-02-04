@@ -27,7 +27,7 @@ namespace DSS.DiversityDetails
             string databaseName = Environment.GetEnvironmentVariable("diversityDetailsDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("diversityDetailsContainerName").ToString();
 
-            Models.DiversityDetail diversityDetailObject = await _cosmos.GenericRetrieveDocument<Models.DiversityDetail>(
+            Models.DiversityDetail diversityDetailObject = await _cosmos.GenericRetrieveDocumentAsync<Models.DiversityDetail>(
                 req.Headers["DiversityDetailId"].ToString(), databaseName, containerName
             );
 

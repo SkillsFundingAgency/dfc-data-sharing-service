@@ -27,7 +27,7 @@ namespace DSS.Sessions
             string databaseName = Environment.GetEnvironmentVariable("sessionsDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("sessionsContainerName").ToString();
 
-            Models.Session sessionObject = await _cosmos.GenericRetrieveDocument<Models.Session>(
+            Models.Session sessionObject = await _cosmos.GenericRetrieveDocumentAsync<Models.Session>(
                 req.Headers["SessionId"].ToString(), databaseName, containerName
             );
 

@@ -27,7 +27,7 @@ namespace DSS.Interaction
             string databaseName = Environment.GetEnvironmentVariable("interactionDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("interactionContainerName").ToString();
 
-            Models.Interaction interactionObject = await _cosmos.GenericRetrieveDocument<Models.Interaction>(
+            Models.Interaction interactionObject = await _cosmos.GenericRetrieveDocumentAsync<Models.Interaction>(
                 req.Headers["InteractionId"].ToString(), databaseName, containerName
             );
 

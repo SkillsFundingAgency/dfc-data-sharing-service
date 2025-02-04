@@ -27,7 +27,7 @@ namespace DSS.EmploymentProgressions
             string databaseName = Environment.GetEnvironmentVariable("employmentProgressionsDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("employmentProgressionsContainerName").ToString();
 
-            Models.EmploymentProgression employmentProgressionObject = await _cosmos.GenericRetrieveDocument<Models.EmploymentProgression>(
+            Models.EmploymentProgression employmentProgressionObject = await _cosmos.GenericRetrieveDocumentAsync<Models.EmploymentProgression>(
                 req.Headers["EmploymentProgressionId"].ToString(), databaseName, containerName
             );
 

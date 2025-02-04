@@ -27,7 +27,7 @@ namespace DSS.Outcome
             string databaseName = Environment.GetEnvironmentVariable("outcomesDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("outcomesContainerName").ToString();
 
-            Models.Outcome outcomeObject = await _cosmos.GenericRetrieveDocument<Models.Outcome>(
+            Models.Outcome outcomeObject = await _cosmos.GenericRetrieveDocumentAsync<Models.Outcome>(
                 req.Headers["OutcomeId"].ToString(), databaseName, containerName
             );
 

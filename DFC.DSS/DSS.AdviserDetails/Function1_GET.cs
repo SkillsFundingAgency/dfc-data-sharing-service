@@ -27,7 +27,7 @@ namespace DSS.AdviserDetails
             string databaseName = Environment.GetEnvironmentVariable("adviserDetailsDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("adviserDetailsContainerName").ToString();
 
-            Models.AdviserDetail adviserDetailObject = await _cosmos.GenericRetrieveDocument<Models.AdviserDetail>(
+            Models.AdviserDetail adviserDetailObject = await _cosmos.GenericRetrieveDocumentAsync<Models.AdviserDetail>(
                 req.Headers["AdviserDetailId"].ToString(), databaseName, containerName
             );
 

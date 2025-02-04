@@ -27,7 +27,7 @@ namespace DSS.ActionPlans.HTTP_Triggers
             string databaseName = Environment.GetEnvironmentVariable("actionPlanDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("actionPlanContainerName").ToString();
 
-            Models.ActionPlan actionPlanObject = await _cosmos.GenericRetrieveDocument<Models.ActionPlan>(
+            Models.ActionPlan actionPlanObject = await _cosmos.GenericRetrieveDocumentAsync<Models.ActionPlan>(
                 req.Headers["ActionPlanId"].ToString(), databaseName, containerName
             );
 

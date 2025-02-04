@@ -27,7 +27,7 @@ namespace DSS.Contact
             string databaseName = Environment.GetEnvironmentVariable("contactDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("contactContainerName").ToString();
 
-            Models.Contact contactObject = await _cosmos.GenericRetrieveDocument<Models.Contact>(
+            Models.Contact contactObject = await _cosmos.GenericRetrieveDocumentAsync<Models.Contact>(
                 req.Headers["ContactId"].ToString(), databaseName, containerName
             );
 

@@ -27,7 +27,7 @@ namespace DSS.Address
             string databaseName = Environment.GetEnvironmentVariable("addressDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("addressContainerName").ToString();
 
-            Models.Address addressObject = await _cosmos.GenericRetrieveDocument<Models.Address>(
+            Models.Address addressObject = await _cosmos.GenericRetrieveDocumentAsync<Models.Address>(
                 req.Headers["AddressId"].ToString(), databaseName, containerName
             );
 

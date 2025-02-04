@@ -27,7 +27,7 @@ namespace DSS.Transfer
             string databaseName = Environment.GetEnvironmentVariable("transfersDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("transfersContainerName").ToString();
 
-            Models.Transfer transferObject = await _cosmos.GenericRetrieveDocument<Models.Transfer>(
+            Models.Transfer transferObject = await _cosmos.GenericRetrieveDocumentAsync<Models.Transfer>(
                 req.Headers["TransferId"].ToString(), databaseName, containerName
             );
 

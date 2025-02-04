@@ -27,7 +27,7 @@ namespace DSS.Collections
             string databaseName = Environment.GetEnvironmentVariable("collectionsDatabaseName").ToString();
             string containerName = Environment.GetEnvironmentVariable("collectionsContainerName").ToString();
 
-            Models.Collection collectionObject = await _cosmos.GenericRetrieveDocument<Models.Collection>(
+            Models.Collection collectionObject = await _cosmos.GenericRetrieveDocumentAsync<Models.Collection>(
                 req.Headers["CollectionId"].ToString(), databaseName, containerName
             );
 

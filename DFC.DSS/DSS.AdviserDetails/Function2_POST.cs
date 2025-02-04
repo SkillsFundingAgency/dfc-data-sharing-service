@@ -37,7 +37,7 @@ namespace DSS.AdviserDetails
                 CreatedBy = "<TOUCHPOINT>"
             };
 
-            Models.AdviserDetail adviserDetailObject = await _cosmos.GenericCreateDocument<Models.AdviserDetail>(
+            Models.AdviserDetail adviserDetailObject = await _cosmos.GenericCreateDocumentAsync<Models.AdviserDetail>(
                 newAdviserDetail, databaseName, containerName
             );
 
