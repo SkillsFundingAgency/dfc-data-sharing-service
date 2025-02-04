@@ -1,3 +1,4 @@
+using Azure.Messaging.ServiceBus;
 using DSS.Interfaces;
 using DSS.SharedServices;
 using Microsoft.Azure.Cosmos;
@@ -18,6 +19,7 @@ namespace DSS.ActionPlans
                    services.AddApplicationInsightsTelemetryWorkerService();
                    services.ConfigureFunctionsApplicationInsights();
                    services.AddSingleton<ICosmosDbService, CosmosDbService>();
+                   services.AddSingleton<IServiceBusService, ServiceBusService>();
                    services.AddSingleton(sp =>
                    {
                        var options = new CosmosClientOptions()
@@ -30,6 +32,15 @@ namespace DSS.ActionPlans
                            Environment.GetEnvironmentVariable("cosmosDbAccessKey"),
                            options
                        );
+                   });
+                   services.AddSingleton(sp =>
+                   {
+                       ServiceBusClient client = new ServiceBusClient(Environment.GetEnvironmentVariable("serviceBusConnectionString"), new ServiceBusClientOptions
+                       {
+                           TransportType = ServiceBusTransportType.AmqpWebSockets
+                       });
+
+                       return client;
                    });
                })
                .Build();
