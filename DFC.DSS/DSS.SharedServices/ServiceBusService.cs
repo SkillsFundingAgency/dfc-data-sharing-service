@@ -9,11 +9,13 @@ namespace DSS.SharedServices
     {
         private readonly ServiceBusClient _serviceBusClient;
         private readonly ILogger<ServiceBusService> _logger;
+        private readonly ILogService _logService;
 
-        public ServiceBusService(ServiceBusClient serviceBusClient, ILogger<ServiceBusService> logger)
+        public ServiceBusService(ServiceBusClient serviceBusClient, ILogger<ServiceBusService> logger, ILogService logService)
         {
             _serviceBusClient = serviceBusClient;
             _logger = logger;
+            _logService = logService;
         }
 
         public async Task<bool> SendQueueMessageAsync<T>(string queueName, string messageId, T messageBody)
@@ -38,20 +40,14 @@ namespace DSS.SharedServices
             catch (Exception ex)
             {
                 _logger.LogWarning($"Unable to send message to queue. Exception: {ex.Message}");
-                LogMethodExit(nameof(SendQueueMessageAsync));
+                _logService.LogMethodExit(nameof(SendQueueMessageAsync));
                 return false;
             }
 
             _logger.LogInformation($"Message was sent successfully");
-            LogMethodExit(nameof(SendQueueMessageAsync));
+            _logService.LogMethodExit(nameof(SendQueueMessageAsync));
 
             return true;
-        }
-
-        // Private helper methods
-        private void LogMethodExit(string nameOfMethod)
-        {
-            _logger.LogInformation($"Method '{nameOfMethod}' has finished invocation");
         }
     }
 }

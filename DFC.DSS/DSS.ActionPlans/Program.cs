@@ -20,6 +20,8 @@ namespace DSS.ActionPlans
                    services.ConfigureFunctionsApplicationInsights();
                    services.AddSingleton<ICosmosDbService, CosmosDbService>();
                    services.AddSingleton<IServiceBusService, ServiceBusService>();
+                   services.AddSingleton<IHttpRequestService, HttpRequestService>();
+                   services.AddSingleton<ILogService, LogService>();
                    services.AddSingleton(sp =>
                    {
                        var options = new CosmosClientOptions()
