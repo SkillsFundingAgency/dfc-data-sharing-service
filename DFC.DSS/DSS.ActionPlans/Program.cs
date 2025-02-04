@@ -1,4 +1,6 @@
 using Azure.Messaging.ServiceBus;
+using DSS.ActionPlans.Interfaces;
+using DSS.ActionPlans.Services;
 using DSS.Interfaces;
 using DSS.SharedServices;
 using Microsoft.Azure.Cosmos;
@@ -18,6 +20,7 @@ namespace DSS.ActionPlans
                {
                    services.AddApplicationInsightsTelemetryWorkerService();
                    services.ConfigureFunctionsApplicationInsights();
+                   services.AddSingleton<IGenericCosmosDbService, GenericCosmosDbService>();
                    services.AddSingleton<ICosmosDbService, CosmosDbService>();
                    services.AddSingleton<IServiceBusService, ServiceBusService>();
                    services.AddSingleton<IHttpRequestService, HttpRequestService>();
