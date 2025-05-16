@@ -6,19 +6,19 @@ using DSS.ActionPlans.HTTP_Triggers;
 using DSS.Interfaces;
 using DSS.Models;
 using System.Net;
+using Castle.Core.Resource;
+using Microsoft.VisualBasic;
 
 namespace DSS.ActionPlans.Tests.FunctionTests
 {
     [TestFixture]
     public class GetActionPlanByActionPlanIdHttpTriggerTests
     {
-        private const string validCustomerId = "7E467BDB-213F-407A-B86A-1954053D3C24";
-        private const string validInteractionId = "1e1a555c-9633-4e12-ab28-09ed60d51cb3";
-        private const string validActionPlanId = "d5369b9a-6959-4bd3-92fc-1583e72b7e51";
-        private Guid validDssCorrelationId = new Guid("452d8e8c-2516-4a6b-9fc1-c85e578ac066");
+        private const string validId = "7e467bdb-213f-407a-b86a-1954053d3c24";
+        private Guid validGuid = new Guid("452d8e8c-2516-4a6b-9fc1-c85e578ac066");
         private const string invalidId = "1111111-2222-3333-4444-555555555555";
         private Customer validCustomer;
-        private Interaction validInteraction;
+        private Models.Interaction validInteraction;
         private Models.ActionPlan validActionPlan;
 
         private Mock<ILogService> _log;
@@ -31,9 +31,9 @@ namespace DSS.ActionPlans.Tests.FunctionTests
         [SetUp]
         public void Setup()
         {
-            validCustomer = new Customer { CustomerId = new Guid(validCustomerId) };
-            validInteraction = new Interaction { InteractionId = new Guid(validInteractionId), CustomerId = new Guid(validCustomerId) };
-            validActionPlan = new Models.ActionPlan { ActionPlanId = new Guid(validActionPlanId), CustomerId = new Guid(validCustomerId) };
+            validCustomer = new Customer { CustomerId = new Guid(validId) };
+            validInteraction = new Models.Interaction { InteractionId = new Guid(validId), CustomerId = new Guid(validId) };
+            validActionPlan = new Models.ActionPlan { ActionPlanId = new Guid(validId), CustomerId = new Guid(validId) };
             Environment.SetEnvironmentVariable("customerDatabaseName", "customers");
             Environment.SetEnvironmentVariable("customerContainerName", "customers");
             Environment.SetEnvironmentVariable("interactionDatabaseName", "interactions");
@@ -53,13 +53,20 @@ namespace DSS.ActionPlans.Tests.FunctionTests
         {
             // Arrange
             _httpRequestService.Setup(x => x.GetTouchpointId(_request)).Returns((string)null);
-            _httpRequestService.Setup(x => x.GetCorrelationId(_request)).Returns(validDssCorrelationId);
+            _httpRequestService.Setup(x => x.GetCorrelationId(_request)).Returns(validGuid);
 
 
             // Act
-            var result = await RunFunction(invalidId, validInteractionId, validActionPlanId);
+            var result = await RunFunction(invalidId, validId, validId);
 
             // Assert
+            _logger.Verify(
+                x => x.Log(
+                    It.Is<LogLevel>(l => l == LogLevel.Warning),
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString() == "Unable to locate 'TouchpointId' in request header"),
+                    It.IsAny<Exception>(),
+                    It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)), Times.Once);
             Assert.That(result, Is.InstanceOf<BadRequestObjectResult>());
         }
 
@@ -67,13 +74,22 @@ namespace DSS.ActionPlans.Tests.FunctionTests
         public async Task GetActionPlanByIdHttpTrigger_ReturnsStatusCodeBadRequest_WhenCustomerIdIsInvalid()
         {
             // Arrange
-            _httpRequestService.Setup(x => x.GetCorrelationId(_request)).Returns(validDssCorrelationId);
+            _httpRequestService.Setup(x => x.GetCorrelationId(_request)).Returns(validGuid);
             _httpRequestService.Setup(x => x.GetTouchpointId(_request)).Returns("0000000001");
+            string warning = $"Unrecognised or invalid entry identified. Customer ID '{invalidId}' , Interaction ID '{validId}' , Action Plan ID '{validId}'";
+
 
             // Act
-            var result = await RunFunction(invalidId, validInteractionId, validActionPlanId);
+            var result = await RunFunction(invalidId, validId, validId);
 
             // Assert
+            _logger.Verify(
+                x => x.Log(
+                It.Is<LogLevel>(l => l == LogLevel.Warning),
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((v, t) => v.ToString() == warning),
+                It.IsAny<Exception>(),
+                It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)), Times.Once);
             Assert.That(result, Is.InstanceOf<BadRequestObjectResult>());
         }
 
@@ -81,13 +97,22 @@ namespace DSS.ActionPlans.Tests.FunctionTests
         public async Task GetActionPlanByIdHttpTrigger_ReturnsStatusCodeBadRequest_WhenInteractionIdIsInvalid()
         {
             // Arrange
-            _httpRequestService.Setup(x => x.GetCorrelationId(_request)).Returns(validDssCorrelationId);
+            _httpRequestService.Setup(x => x.GetCorrelationId(_request)).Returns(validGuid);
             _httpRequestService.Setup(x => x.GetTouchpointId(_request)).Returns("0000000001");
+            string warning = $"Unrecognised or invalid entry identified. Customer ID '{validId}' , Interaction ID '{invalidId}' , Action Plan ID '{validId}'";
+
 
             // Act
-            var result = await RunFunction(validCustomerId, invalidId, validActionPlanId);
+            var result = await RunFunction(validId, invalidId, validId);
 
             // Assert
+            _logger.Verify(
+                x => x.Log(
+                It.Is<LogLevel>(l => l == LogLevel.Warning),
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((v, t) => v.ToString() == warning),
+                It.IsAny<Exception>(),
+                It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)), Times.Once);
             Assert.That(result, Is.InstanceOf<BadRequestObjectResult>());
         }
 
@@ -95,13 +120,22 @@ namespace DSS.ActionPlans.Tests.FunctionTests
         public async Task GetActionPlanByIdHttpTrigger_ReturnsStatusCodeBadRequest_WhenActionPlanIdIsInvalid()
         {
             // Arrange
-            _httpRequestService.Setup(x => x.GetCorrelationId(_request)).Returns(validDssCorrelationId);
+            _httpRequestService.Setup(x => x.GetCorrelationId(_request)).Returns(validGuid);
             _httpRequestService.Setup(x => x.GetTouchpointId(_request)).Returns("0000000001");
+            string warning = $"Unrecognised or invalid entry identified. Customer ID '{validId}' , Interaction ID '{validId}' , Action Plan ID '{invalidId}'";
+
 
             // Act
-            var result = await RunFunction(validCustomerId, validInteractionId, invalidId);
+            var result = await RunFunction(validId, validId, invalidId);
 
             // Assert
+            _logger.Verify(
+                x => x.Log(
+                It.Is<LogLevel>(l => l == LogLevel.Warning),
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((v, t) => v.ToString() == warning),
+                It.IsAny<Exception>(),
+                It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)), Times.Once);
             Assert.That(result, Is.InstanceOf<BadRequestObjectResult>());
         }
 
@@ -109,14 +143,23 @@ namespace DSS.ActionPlans.Tests.FunctionTests
         public async Task GetActionPlanByIdHttpTrigger_ReturnsStatusCodeNoContent_WhenCustomerDoesNotExist()
         {
             // Arrange
-            _httpRequestService.Setup(x => x.GetCorrelationId(_request)).Returns(validDssCorrelationId);
+            _httpRequestService.Setup(x => x.GetCorrelationId(_request)).Returns(validGuid);
             _httpRequestService.Setup(x => x.GetTouchpointId(_request)).Returns("0000000001");
             _genericCosmosDbService.Setup(x => x.RetrieveDocumentAsync<Customer>(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult((Customer)null));
+            string warning = $"Customer does not exist with ID '{validId}'";
+            //Customer does not exist with ID '7e467bdb-213f-407a-b86a-1954053d3c24'
 
             // Act
-            var result = await RunFunction(validCustomerId, validInteractionId, validActionPlanId);
+            var result = await RunFunction(validId, validId, validId);
 
             // Assert
+            _logger.Verify(
+                x => x.Log(
+                It.Is<LogLevel>(l => l == LogLevel.Warning),
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((v, t) => v.ToString() == warning),
+                It.IsAny<Exception>(),
+                It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)), Times.Once);
             Assert.That(result, Is.InstanceOf<NoContentResult>());
         }
 
@@ -124,15 +167,23 @@ namespace DSS.ActionPlans.Tests.FunctionTests
         public async Task GetActionPlanByIdHttpTrigger_ReturnsStatusCodeNoContent_WhenInteractionDoesNotExist()
         {
             // Arrange
-            _httpRequestService.Setup(x => x.GetCorrelationId(_request)).Returns(validDssCorrelationId);
+            _httpRequestService.Setup(x => x.GetCorrelationId(_request)).Returns(validGuid);
             _httpRequestService.Setup(x => x.GetTouchpointId(_request)).Returns("0000000001");
             _genericCosmosDbService.Setup(x => x.RetrieveDocumentAsync<Customer>(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult(validCustomer));
-            _genericCosmosDbService.Setup(x => x.RetrieveDocumentAsync<Interaction>(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult((Interaction)null));
+            _genericCosmosDbService.Setup(x => x.RetrieveDocumentAsync<Models.Interaction>(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult((Models.Interaction)null));
+            string warning = $"Interaction with ID '{validId}' does not exist";
 
             // Act
-            var result = await RunFunction(validCustomerId, validInteractionId, validActionPlanId);
+            var result = await RunFunction(validId, validId, validId);
 
             // Assert
+            _logger.Verify(
+                x => x.Log(
+                It.Is<LogLevel>(l => l == LogLevel.Warning),
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((v, t) => v.ToString() == warning),
+                It.IsAny<Exception>(),
+                It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)), Times.Once);
             Assert.That(result, Is.InstanceOf<NoContentResult>());
         }
 
@@ -140,16 +191,24 @@ namespace DSS.ActionPlans.Tests.FunctionTests
         public async Task GetActionPlanByIdHttpTrigger_ReturnsStatusCodeNoContent_WhenActionPlanDoesNotExist()
         {
             // Arrange
-            _httpRequestService.Setup(x => x.GetCorrelationId(_request)).Returns(validDssCorrelationId);
+            _httpRequestService.Setup(x => x.GetCorrelationId(_request)).Returns(validGuid);
             _httpRequestService.Setup(x => x.GetTouchpointId(_request)).Returns("0000000001");
             _genericCosmosDbService.Setup(x => x.RetrieveDocumentAsync<Customer>(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult(validCustomer));
-            _genericCosmosDbService.Setup(x => x.RetrieveDocumentAsync<Interaction>(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult(validInteraction));
+            _genericCosmosDbService.Setup(x => x.RetrieveDocumentAsync<Models.Interaction>(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult(validInteraction));
             _genericCosmosDbService.Setup(x => x.RetrieveDocumentAsync<Models.ActionPlan>(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult((Models.ActionPlan)null));
+            string warning = $"Action Plan does not exist with ID '{validId}'";
 
             // Act
-            var result = await RunFunction(validCustomerId, validInteractionId, validActionPlanId);
+            var result = await RunFunction(validId, validId, validId);
 
             // Assert
+            _logger.Verify(
+                x => x.Log(
+                It.Is<LogLevel>(l => l == LogLevel.Warning),
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((v, t) => v.ToString() == warning),
+                It.IsAny<Exception>(),
+                It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)), Times.Once);
             Assert.That(result, Is.InstanceOf<NoContentResult>());
         }
 
@@ -157,14 +216,14 @@ namespace DSS.ActionPlans.Tests.FunctionTests
         public async Task GetActionPlanByIdHttpTrigger_ReturnsStatusCodeOk_WhenActionPlanExists()
         {
             // Arrange
-            _httpRequestService.Setup(x => x.GetCorrelationId(_request)).Returns(validDssCorrelationId);
+            _httpRequestService.Setup(x => x.GetCorrelationId(_request)).Returns(validGuid);
             _httpRequestService.Setup(x => x.GetTouchpointId(_request)).Returns("0000000001");
             _genericCosmosDbService.Setup(x => x.RetrieveDocumentAsync<Customer>(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult(validCustomer));
-            _genericCosmosDbService.Setup(x => x.RetrieveDocumentAsync<Interaction>(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult(validInteraction));
+            _genericCosmosDbService.Setup(x => x.RetrieveDocumentAsync<Models.Interaction>(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult(validInteraction));
             _genericCosmosDbService.Setup(x => x.RetrieveDocumentAsync<Models.ActionPlan>(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult(validActionPlan));
 
             // Act
-            var result = await RunFunction(validCustomerId, validInteractionId, validActionPlanId);
+            var result = await RunFunction(validId, validId, validId);
             var jsonResult = result as JsonResult;
 
             // Assert
