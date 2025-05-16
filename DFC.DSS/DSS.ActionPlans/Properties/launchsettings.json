@@ -1,0 +1,68 @@
+{
+  "profiles": {
+    "AT": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7140",
+      "environmentVariables": {
+        "envHostName": "AT",
+        "cosmosDbUri": "https://dss-at-shared-cdb.documents.azure.com:443",
+        "cosmosDbAccessKey": "<REPLACE ME>",
+        "actionPlanDatabaseName": "actionplans",
+        "actionPlanContainerName": "actionplans",
+        "customerDatabaseName": "customers",
+        "customerContainerName": "customers",
+        "interactionDatabaseName": "interactions",
+        "interactionContainerName": "interactions",
+        "serviceBusConnectionString": "<REPLACE ME>"
+      }
+    },
+    "TEST": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7140",
+      "environmentVariables": {
+        "envHostName": "TEST",
+        "cosmosDbUri": "https://dss-test-shared-cdb.documents.azure.com:443",
+        "cosmosDbAccessKey": "<REPLACE ME>",
+        "actionPlanDatabaseName": "actionplans",
+        "actionPlanContainerName": "actionplans",
+        "customerDatabaseName": "customers",
+        "customerContainerName": "customers",
+        "interactionDatabaseName": "interactions",
+        "interactionContainerName": "interactions",
+        "serviceBusConnectionString": "<REPLACE ME>"
+      }
+    },
+    "OAT": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7140",
+      "environmentVariables": {
+        "envHostName": "OAT",
+        "cosmosDbUri": "https://dss-oat-shared-cdb.documents.azure.com:443",
+        "cosmosDbAccessKey": "<REPLACE ME>",
+        "actionPlanDatabaseName": "actionplans",
+        "actionPlanContainerName": "actionplans",
+        "customerDatabaseName": "customers",
+        "customerContainerName": "customers",
+        "interactionDatabaseName": "interactions",
+        "interactionContainerName": "interactions",
+        "serviceBusConnectionString": "<REPLACE ME>"
+      }
+    },
+    "PP": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7140",
+      "environmentVariables": {
+        "envHostName": "PP",
+        "cosmosDbUri": "https://dss-pp-shared-cdb.documents.azure.com:443",
+        "cosmosDbAccessKey": "<REPLACE ME>",
+        "actionPlanDatabaseName": "actionplans",
+        "actionPlanContainerName": "actionplans",
+        "customerDatabaseName": "customers",
+        "customerContainerName": "customers",
+        "interactionDatabaseName": "interactions",
+        "interactionContainerName": "interactions",
+        "serviceBusConnectionString": "<REPLACE ME>"
+      }
+    }
+  }
+}
