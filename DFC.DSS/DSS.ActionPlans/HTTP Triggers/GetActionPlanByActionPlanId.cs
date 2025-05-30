@@ -4,8 +4,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
+using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Text.Json;
+using DSS.Swagger.Annotations;
 
 namespace DSS.ActionPlans.HTTP_Triggers
 {
@@ -39,6 +41,13 @@ namespace DSS.ActionPlans.HTTP_Triggers
         }
 
         [Function("GetActionPlanByActionPlanId")]
+        [ProducesResponseType(typeof(Models.ActionPlan), (int)HttpStatusCode.OK)]
+        [Response(HttpStatusCode = (int)HttpStatusCode.OK, Description = "Action Plan found", ShowSchema = true)]
+        [Response(HttpStatusCode = (int)HttpStatusCode.NoContent, Description = "Action Plan does not exist", ShowSchema = false)]
+        [Response(HttpStatusCode = (int)HttpStatusCode.BadRequest, Description = "Request was malformed", ShowSchema = false)]
+        [Response(HttpStatusCode = (int)HttpStatusCode.Unauthorized, Description = "API key is unknown or invalid", ShowSchema = false)]
+        [Response(HttpStatusCode = (int)HttpStatusCode.Forbidden, Description = "Insufficient access", ShowSchema = false)]
+        [Display(Name = "Get", Description = "Ability to retrieve an individual action plan for the given customer")]
         public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "Customers/{customerId}/Interactions/{interactionId}/ActionPlans/{actionPlanId}")] HttpRequest req, string customerId, string interactionId, string actionPlanId)
         {
             _logService.LogFunctionInvocation(nameof(GetActionPlanByActionPlanId));

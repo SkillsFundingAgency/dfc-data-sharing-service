@@ -18,6 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\DSS.Interfaces\DSS.Interfaces.csproj" />
     <ProjectReference Include="..\DSS.SharedServices\DSS.SharedServices.csproj" />
+    <ProjectReference Include="..\DSS.Swagger\DSS.Swagger.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">

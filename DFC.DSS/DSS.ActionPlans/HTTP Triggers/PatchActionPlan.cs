@@ -9,6 +9,7 @@ using System.Net;
 using System.Text.Json;
 using DSS.Models;
 using DSS.ActionPlans.Interfaces;
+using DSS.Swagger.Annotations;
 
 namespace DSS.ActionPlans.HTTP_Triggers
 {
@@ -55,6 +56,12 @@ namespace DSS.ActionPlans.HTTP_Triggers
 
         [Function("PatchActionPlan")]
         [ProducesResponseType(typeof(Models.ActionPlan), (int)HttpStatusCode.OK)]
+        [Response(HttpStatusCode = (int)HttpStatusCode.OK, Description = "Action Plan Updated", ShowSchema = true)]
+        [Response(HttpStatusCode = (int)HttpStatusCode.NoContent, Description = "Action Plan does not exist", ShowSchema = false)]
+        [Response(HttpStatusCode = (int)HttpStatusCode.BadRequest, Description = "Request was malformed", ShowSchema = false)]
+        [Response(HttpStatusCode = (int)HttpStatusCode.Unauthorized, Description = "API key is unknown or invalid", ShowSchema = false)]
+        [Response(HttpStatusCode = (int)HttpStatusCode.Forbidden, Description = "Insufficient access", ShowSchema = false)]
+        [Response(HttpStatusCode = 422, Description = "Action Plan validation error(s)", ShowSchema = false)]
         [Display(Name = "Patch", Description = "Ability to modify/update a customers action plan record. <br>" +
                                                "<br><b>Validation Rules:</b> <br>" +
                                                "<br><b>DateActionPlanCreated:</b> DateActionPlanCreated >= Session.DateAndTimeOfSession <br>" +
@@ -80,6 +87,7 @@ namespace DSS.ActionPlans.HTTP_Triggers
             if (string.IsNullOrEmpty(apimUrl))
             {
                 _logger.LogWarning("Unable to locate 'apimURL' in request header");
+                _logService.LogFunctionExit(nameof(PatchActionPlan), correlationId);
                 return new BadRequestObjectResult("nable to locate 'apimurl' in request header");
             }
 
@@ -97,7 +105,7 @@ namespace DSS.ActionPlans.HTTP_Triggers
             if (!queryParamsValidatedSuccessfully)
             {
                 _logger.LogWarning("Unrecognised or invalid entry identified. Customer ID '{customerId}' , Interaction ID '{interactionId}' , Action Plan ID '{actionPlanId}'", customerId, interactionId, actionPlanId);
-                _logService.LogFunctionExit(nameof(GetActionPlanByActionPlanId), correlationId);
+                _logService.LogFunctionExit(nameof(PatchActionPlan), correlationId);
                 return new BadRequestObjectResult("Unrecognised or invalid entry identified (Customer ID, Interaction ID and/or Action Plan ID)");
             }
 
@@ -112,12 +120,14 @@ namespace DSS.ActionPlans.HTTP_Triggers
             catch (Exception ex)
             {           
                 _logger.LogError(ex, "Unable to read request body. Exception: {ExceptionMessage}", ex.Message);
+                _logService.LogFunctionExit(nameof(PatchActionPlan), correlationId);
                 return new UnprocessableEntityObjectResult(_dynamicConverterService.ExcludeProperty(ex, ["TargetSite"]));
             }
 
             if (actionPlanPatchRequest == null)
             {
                 _logger.LogWarning("{actionPlanPatchRequest} object is NULL", nameof(actionPlanPatchRequest));
+                _logService.LogFunctionExit(nameof(PatchActionPlan), correlationId);
                 return new UnprocessableEntityObjectResult(req);
             }
 
@@ -132,7 +142,7 @@ namespace DSS.ActionPlans.HTTP_Triggers
             if (customer == null)
             {
                 _logger.LogWarning("Customer does not exist with ID '{customerGuid}'", customerGuid);
-                _logService.LogFunctionExit(nameof(GetActionPlansByCustomerId), correlationId);
+                _logService.LogFunctionExit(nameof(PatchActionPlan), correlationId);
                 return new NoContentResult();
             }
             _logger.LogInformation("Customer exists. Customer GUID: {CustomerGuid}", customerGuid);
@@ -147,6 +157,7 @@ namespace DSS.ActionPlans.HTTP_Triggers
                     StatusCode = (int)HttpStatusCode.Forbidden
                 };                
                 _logger.LogWarning("Customer is read-only. Customer GUID: {CustomerId}", customerGuid);
+                _logService.LogFunctionExit(nameof(PatchActionPlan), correlationId);
                 return response;
             }
                         
@@ -155,11 +166,13 @@ namespace DSS.ActionPlans.HTTP_Triggers
             if (interaction == null)
             {
                 _logger.LogWarning("Interaction does not exist. Customer GUID: {CustomerId}. Interaction GUID: {InteractionGuid}", customerGuid, interactionGuid);
+                _logService.LogFunctionExit(nameof(PatchActionPlan), correlationId); 
                 return new NoContentResult();
             }
             else if (interaction.CustomerId != customerGuid)
             {
                 _logger.LogWarning("Interaction does not belong to the provided customer. Customer GUID: {CustomerId}. Interaction GUID: {InteractionGuid}", customerGuid, interactionGuid);
+                _logService.LogFunctionExit(nameof(PatchActionPlan), correlationId); 
                 return new NoContentResult();
             }
             _logger.LogInformation("Interaction exists and belongs to the provided customer. Customer GUID: {CustomerId}. Interaction GUID: {InteractionGuid}", customerGuid, interactionGuid);
@@ -171,6 +184,7 @@ namespace DSS.ActionPlans.HTTP_Triggers
             if (actionPlanForCustomer == null)
             {                                
                 _logger.LogWarning("Action Plan does not exist. Customer GUID: {CustomerId}. Action Plan GUID: {ActionPlanGuid}", customerGuid, actionPlanGuid);
+                _logService.LogFunctionExit(nameof(PatchActionPlan), correlationId); 
                 return new NoContentResult();
             }
 
@@ -196,7 +210,6 @@ namespace DSS.ActionPlans.HTTP_Triggers
                 CustomerSatisfaction = actionPlanPatchRequest.CustomerSatisfaction ?? actionPlanForCustomer.CustomerSatisfaction
             };
 
-            _logger.LogInformation("Attempting to get Date and Time of Session. SessionID: {SessionID}", patchedActionPlan.SessionId);
             Session session = await _genericCosmosDbService.RetrieveDocumentAsync<Session>(patchedActionPlan.SessionId.GetValueOrDefault().ToString(), sessionDatabaseName, sessionContainerName);
 
             _logger.LogInformation("Attempting to validate {ActionPlanValidationObject} object", nameof(patchedActionPlan));
@@ -206,12 +219,13 @@ namespace DSS.ActionPlans.HTTP_Triggers
                 var er = errors.Select(e => e.ErrorMessage).ToList();
                 var response = new UnprocessableEntityObjectResult(errors);
                 _logger.LogWarning("Falied to validate {ActionPlanValidationObject}", nameof(patchedActionPlan));
+                _logService.LogFunctionExit(nameof(PatchActionPlan), correlationId); 
                 return response;
             }
             _logger.LogInformation("Successfully validated {ActionPlanValidationObject}", nameof(patchedActionPlan));
                         
             _logger.LogInformation("Attempting to PATCH Action Plan in Cosmos DB. Action Plan GUID: {ActionPlanGuid}", actionPlanGuid);
-            var updatedActionPlan = await _genericCosmosDbService.ReplaceDocumentAsync<Models.ActionPlan>(patchedActionPlan, patchedActionPlan.ActionPlanId.ToString(), actionPlanDatabaseName, actionPlanContainerName);
+            var updatedActionPlan = await _genericCosmosDbService.ReplaceDocumentAsync(patchedActionPlan, patchedActionPlan.ActionPlanId.ToString(), actionPlanDatabaseName, actionPlanContainerName);
 
             if (updatedActionPlan != null)
             {
@@ -219,12 +233,12 @@ namespace DSS.ActionPlans.HTTP_Triggers
 
                 var message = new
                 {
-                    TitleMessage = "New Action Plan record {" + patchedActionPlan.ActionPlanId + "} added at " + DateTime.UtcNow,
-                    CustomerGuid = patchedActionPlan.CustomerId,
-                    patchedActionPlan.LastModifiedDate,
-                    URL = apimUrl + "/" + patchedActionPlan.ActionPlanId,
+                    TitleMessage = "Action Plan record modification for {" + updatedActionPlan.CustomerId + "} at " + DateTime.UtcNow,
+                    CustomerGuid = updatedActionPlan.CustomerId,
+                    updatedActionPlan.LastModifiedDate,
+                    URL = apimUrl,
                     IsNewCustomer = false,
-                    TouchpointId = patchedActionPlan.LastModifiedTouchpointId
+                    TouchpointId = updatedActionPlan.LastModifiedTouchpointId
                 };
 
                 _logger.LogInformation("Attempting to send message to Service Bus Namespace. Action Plan GUID: {ActionPlanGuid}", actionPlanGuid);
@@ -235,11 +249,11 @@ namespace DSS.ActionPlans.HTTP_Triggers
             if (updatedActionPlan == null)
             {
                 _logger.LogWarning("PATCH request unsuccessful. Action Plan GUID: {ActionPlanGuid}", actionPlanGuid);
-                _logger.LogInformation("Function {FunctionName} has finished invoking", nameof(PatchActionPlan));
+                _logService.LogFunctionExit(nameof(PatchActionPlan), correlationId); 
                 return new BadRequestObjectResult(actionPlanGuid);
             }
 
-            _logger.LogInformation("Function {FunctionName} has finished invoking", nameof(PatchActionPlan));
+            _logService.LogFunctionExit(nameof(PatchActionPlan), correlationId);
             return new JsonResult(_dynamicConverterService.ExcludeProperty(updatedActionPlan, "CreatedBy"), new JsonSerializerOptions()) 
             { 
                 StatusCode = (int)HttpStatusCode.OK 
