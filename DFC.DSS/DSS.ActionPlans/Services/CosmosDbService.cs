@@ -20,24 +20,24 @@ namespace DSS.ActionPlans.Services
             _logService = logService;
         }
 
-        public async Task<List<ActionPlan>> RetrieveActionPlansForCustomerAsync(Guid customerId, string databaseName, string containerName)
+        public async Task<List<Models.ActionPlan>> RetrieveActionPlansForCustomerAsync(Guid customerId, string databaseName, string containerName)
         {
             _logger.LogInformation($"Method '{nameof(RetrieveActionPlansForCustomerAsync)}' has been invoked");
             _logger.LogInformation($"Attempting to retrieve container '{containerName}' from database '{databaseName}'");
 
             Container cosmosDbContainer = _cosmosDbClient.GetContainer(databaseName, containerName);
-            List<ActionPlan> actionPlanList = new List<ActionPlan>();
+            List<Models.ActionPlan> actionPlanList = new List<Models.ActionPlan>();
 
             _logger.LogInformation($"Attempting to retrieve all Action Plan documents with CustomerId '{customerId}' from Cosmos DB");
 
-            using (FeedIterator<ActionPlan> setIterator = cosmosDbContainer
-                .GetItemLinqQueryable<ActionPlan>()
+            using (FeedIterator<Models.ActionPlan> setIterator = cosmosDbContainer
+                .GetItemLinqQueryable<Models.ActionPlan>()
                 .Where(actionPlan => actionPlan.CustomerId == customerId)
                 .ToFeedIterator()
             ) {
                 while (setIterator.HasMoreResults)
                 {
-                    foreach (ActionPlan actionPlan in await setIterator.ReadNextAsync())
+                    foreach (Models.ActionPlan actionPlan in await setIterator.ReadNextAsync())
                     {
                         actionPlanList.Add(actionPlan);
                     }

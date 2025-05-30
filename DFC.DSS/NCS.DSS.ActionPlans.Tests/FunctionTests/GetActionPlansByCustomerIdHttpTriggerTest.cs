@@ -27,6 +27,7 @@ namespace DSS.ActionPlans.Tests.FunctionTests
         private Mock<IGenericCosmosDbService> _genericCosmosDbService;
         private GetActionPlansByCustomerId _function;
         private Mock<ICosmosDbService> _actionPlansCosmosDbService;
+        private Mock<IDynamicConverterService> _dynamicConverterService;
 
         [SetUp]
         public void Setup()
@@ -45,7 +46,8 @@ namespace DSS.ActionPlans.Tests.FunctionTests
             _genericCosmosDbService = new Mock<IGenericCosmosDbService>();
             _log = new Mock<ILogService>();
             _actionPlansCosmosDbService = new Mock<ICosmosDbService>();
-            _function = new GetActionPlansByCustomerId(_logger.Object, _httpRequestService.Object, _genericCosmosDbService.Object, _actionPlansCosmosDbService.Object, _log.Object);
+            _dynamicConverterService = new Mock<IDynamicConverterService>();
+            _function = new GetActionPlansByCustomerId(_logger.Object, _httpRequestService.Object, _genericCosmosDbService.Object, _actionPlansCosmosDbService.Object, _log.Object, _dynamicConverterService.Object);
         }
 
         [Test]
