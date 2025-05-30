@@ -1,5 +1,6 @@
 ﻿using DSS.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 
 namespace DSS.SharedServices
 {
@@ -20,6 +21,36 @@ namespace DSS.SharedServices
         public string GetTouchpointId(HttpRequest request)
         {
             return request.Headers["TouchpointId"].FirstOrDefault() ?? "";
+        }
+
+        public string GetApimUrl(HttpRequest request)
+        {
+            var apimUrl = request.Headers["apimurl"].FirstOrDefault();
+
+            if (!string.IsNullOrEmpty(apimUrl) && apimUrl.EndsWith("/"))
+                apimUrl = apimUrl.Substring(0, apimUrl.Length - 1);
+
+            return apimUrl ?? "";
+        }
+
+        public string GetSubcontractorId(HttpRequest request)
+        {
+            return request.Headers["SubcontractorId"].FirstOrDefault() ?? "";
+        }
+
+        public async Task<T> GetResourceFromRequest<T>(HttpRequest request)
+        {
+            if (request == null)
+                throw new ArgumentNullException(nameof(request));
+
+            if (request.Body == null)
+                throw new ArgumentNullException(nameof(request.Body));
+
+            request.ContentType = "application/json";
+
+            var requestBody = await new StreamReader(request.Body).ReadToEndAsync();
+
+            return JsonConvert.DeserializeObject<T>(requestBody);
         }
     }
 }
