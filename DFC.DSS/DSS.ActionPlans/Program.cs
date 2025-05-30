@@ -25,6 +25,7 @@ namespace DSS.ActionPlans
                    services.AddSingleton<IServiceBusService, ServiceBusService>();
                    services.AddSingleton<IHttpRequestService, HttpRequestService>();
                    services.AddSingleton<ILogService, LogService>();
+                   services.AddSingleton<IDynamicConverterService, DynamicConverterService>();
                    services.AddSingleton(sp =>
                    {
                        var options = new CosmosClientOptions()
