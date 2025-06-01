@@ -4,7 +4,7 @@
 
 | API Name | Description | Latest Version |
 | -- | -- | -- |
-| [Action Plans](/DFC.DSS/DSS.ActionPlans/README.md) | X | X |
+| [Action Plans](/DFC.DSS/DSS.ActionPlans/README.md) | Function App to provide an API for maintaining an action plan | v4 |
 | [Actions](/DFC.DSS/DSS.Actions/README.md) | X | X |
 | [Address](/DFC.DSS/DSS.Address/README.md) | X | X |
 | [Adviser Details](/DFC.DSS/DSS.AdviserDetails/README.md) | X | X |
