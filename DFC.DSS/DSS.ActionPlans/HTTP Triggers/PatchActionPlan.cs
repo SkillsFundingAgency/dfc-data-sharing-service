@@ -88,7 +88,7 @@ namespace DSS.ActionPlans.HTTP_Triggers
             {
                 _logger.LogWarning("Unable to locate 'apimURL' in request header");
                 _logService.LogFunctionExit(nameof(PatchActionPlan), correlationId);
-                return new BadRequestObjectResult("nable to locate 'apimurl' in request header");
+                return new BadRequestObjectResult("Unable to locate 'apimurl' in request header");
             }
 
             var subcontractorId = _httpRequestService.GetSubcontractorId(req);
@@ -188,8 +188,6 @@ namespace DSS.ActionPlans.HTTP_Triggers
                 return new NoContentResult();
             }
 
-            _logger.LogInformation("Attempting to PATCH Action Plan resource.");
-
             Models.ActionPlan patchedActionPlan = new Models.ActionPlan()
             {
                 ActionPlanId = actionPlanForCustomer.ActionPlanId,
@@ -210,19 +208,32 @@ namespace DSS.ActionPlans.HTTP_Triggers
                 CustomerSatisfaction = actionPlanPatchRequest.CustomerSatisfaction ?? actionPlanForCustomer.CustomerSatisfaction
             };
 
-            Session session = await _genericCosmosDbService.RetrieveDocumentAsync<Session>(patchedActionPlan.SessionId.GetValueOrDefault().ToString(), sessionDatabaseName, sessionContainerName);
+            Session session = await _genericCosmosDbService.RetrieveDocumentAsync<Session>(patchedActionPlan.SessionId.ToString(), sessionDatabaseName, sessionContainerName);
+            if (session == null)
+            {
+                _logger.LogWarning("Session does not exist. Customer GUID: {CustomerId}. Session GUID: {SessionGuid}", customerGuid, patchedActionPlan.SessionId);
+                _logService.LogFunctionExit(nameof(PatchActionPlan), correlationId);
+                return new NoContentResult();
+            }
+            else if (session.CustomerId != customerGuid)
+            {
+                _logger.LogWarning("Session does not belong to the provided customer. Customer GUID: {CustomerId}. Session GUID: {SessionGuid}", customerGuid, patchedActionPlan.SessionId);
+                _logService.LogFunctionExit(nameof(PatchActionPlan), correlationId);
+                return new NoContentResult();
+            }
+            _logger.LogInformation("Session exists and belongs to the provided customer. Customer GUID: {CustomerId}. Session GUID: {SessionGuid}", customerGuid, patchedActionPlan.SessionId);
 
-            _logger.LogInformation("Attempting to validate {ActionPlanValidationObject} object", nameof(patchedActionPlan));
+            _logger.LogInformation("Attempting to validate {ActionPlanValidationObject} object", nameof(ActionPlan));
             var errors = _validate.ValidateResource(patchedActionPlan, session.DateandTimeOfSession);
             if (errors != null && errors.Any())
             {
                 var er = errors.Select(e => e.ErrorMessage).ToList();
                 var response = new UnprocessableEntityObjectResult(errors);
-                _logger.LogWarning("Falied to validate {ActionPlanValidationObject}", nameof(patchedActionPlan));
+                _logger.LogWarning("Failed to validate {ActionPlanValidationObject}", nameof(ActionPlan));
                 _logService.LogFunctionExit(nameof(PatchActionPlan), correlationId); 
                 return response;
             }
-            _logger.LogInformation("Successfully validated {ActionPlanValidationObject}", nameof(patchedActionPlan));
+            _logger.LogInformation("Successfully validated {ActionPlanValidationObject}", nameof(ActionPlan));
                         
             _logger.LogInformation("Attempting to PATCH Action Plan in Cosmos DB. Action Plan GUID: {ActionPlanGuid}", actionPlanGuid);
             var updatedActionPlan = await _genericCosmosDbService.ReplaceDocumentAsync(patchedActionPlan, patchedActionPlan.ActionPlanId.ToString(), actionPlanDatabaseName, actionPlanContainerName);

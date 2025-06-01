@@ -175,19 +175,33 @@ namespace DSS.ActionPlans.HTTP_Triggers
             }
             _logger.LogInformation("Interaction exists and belongs to the provided customer. Customer GUID: {CustomerId}. Interaction GUID: {InteractionGuid}", customerGuid, interactionGuid);
 
-            Session session = await _genericCosmosDbService.RetrieveDocumentAsync<Session>(actionPlanRequest.SessionId.GetValueOrDefault().ToString(), sessionDatabaseName, sessionContainerName);
+            Session session = await _genericCosmosDbService.RetrieveDocumentAsync<Session>(actionPlanRequest.SessionId.ToString(), sessionDatabaseName, sessionContainerName);
+            if (session == null)
+            {
+                _logger.LogWarning("Session does not exist. Customer GUID: {CustomerId}. Session GUID: {SessionGuid}", customerGuid, actionPlanRequest.SessionId);
+                _logService.LogFunctionExit(nameof(PatchActionPlan), correlationId);
+                return new NoContentResult();
+            }
+            else if (session.CustomerId != customerGuid)
+            {
+                _logger.LogWarning("Session does not belong to the provided customer. Customer GUID: {CustomerId}. Session GUID: {SessionGuid}", customerGuid, actionPlanRequest.SessionId);
+                _logService.LogFunctionExit(nameof(PatchActionPlan), correlationId);
+                return new NoContentResult();
+            }
+            _logger.LogInformation("Session exists and belongs to the provided customer. Customer GUID: {CustomerId}. Session GUID: {SessionGuid}", customerGuid, actionPlanRequest.SessionId);
 
-            _logger.LogInformation("Attempting to validate {ActionPlanRequest} object", nameof(actionPlanRequest));
+
+            _logger.LogInformation("Attempting to validate {ActionPlanRequest} object", nameof(ActionPlan));
             var errors = _validate.ValidateResource(actionPlanRequest, session.DateandTimeOfSession);
             if (errors != null && errors.Any())
             {
                 var er = errors.Select(e => e.ErrorMessage).ToList();
                 var response = new UnprocessableEntityObjectResult(errors);
-                _logger.LogWarning("Falied to validate {ActionPlanRequest}", nameof(actionPlanRequest));
+                _logger.LogWarning("Failed to validate {ActionPlanRequest}", nameof(ActionPlan));
                 _logService.LogFunctionExit(nameof(PostActionPlan), correlationId);
                 return response;
             }
-            _logger.LogInformation("Successfully validated {ActionPlanRequest}", nameof(actionPlanRequest));
+            _logger.LogInformation("Successfully validated {ActionPlanRequest}", nameof(ActionPlan));
                         
             _logger.LogInformation("Attempting to POST Action Plan in Cosmos DB. Action Plan GUID: {ActionPlanGuid}", actionPlanRequest.ActionPlanId);
             var actionPlan = await _genericCosmosDbService.CreateDocumentAsync(actionPlanRequest, actionPlanDatabaseName, actionPlanContainerName);
