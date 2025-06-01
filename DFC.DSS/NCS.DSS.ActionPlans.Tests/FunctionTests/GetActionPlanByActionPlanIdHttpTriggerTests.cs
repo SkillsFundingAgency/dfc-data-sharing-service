@@ -8,6 +8,7 @@ using DSS.Models;
 using System.Net;
 using Castle.Core.Resource;
 using Microsoft.VisualBasic;
+using DSS.SharedServices;
 
 namespace DSS.ActionPlans.Tests.FunctionTests
 {
@@ -20,6 +21,7 @@ namespace DSS.ActionPlans.Tests.FunctionTests
         private Customer validCustomer;
         private Models.Interaction validInteraction;
         private Models.ActionPlan validActionPlan;
+        private const string validTouchpointId = "0000000001";
 
         private Mock<ILogService> _log;
         private HttpRequest _request;
@@ -27,6 +29,7 @@ namespace DSS.ActionPlans.Tests.FunctionTests
         private Mock<ILogger<GetActionPlanByActionPlanId>> _logger;
         private Mock<IGenericCosmosDbService> _genericCosmosDbService;
         private GetActionPlanByActionPlanId _function;
+        private DynamicConverterService _dynamicConverterService;
 
         [SetUp]
         public void Setup()
@@ -45,7 +48,8 @@ namespace DSS.ActionPlans.Tests.FunctionTests
             _httpRequestService = new Mock<IHttpRequestService>();
             _logger = new Mock<ILogger<GetActionPlanByActionPlanId>>();
             _genericCosmosDbService = new Mock<IGenericCosmosDbService>();
-            _function = new GetActionPlanByActionPlanId(_logger.Object, _httpRequestService.Object, _genericCosmosDbService.Object, _log.Object);
+            _dynamicConverterService = new DynamicConverterService();
+            _function = new GetActionPlanByActionPlanId(_logger.Object, _httpRequestService.Object, _genericCosmosDbService.Object, _log.Object, _dynamicConverterService);
         }
 
         [Test]
@@ -75,7 +79,7 @@ namespace DSS.ActionPlans.Tests.FunctionTests
         {
             // Arrange
             _httpRequestService.Setup(x => x.GetCorrelationId(_request)).Returns(validGuid);
-            _httpRequestService.Setup(x => x.GetTouchpointId(_request)).Returns("0000000001");
+            _httpRequestService.Setup(x => x.GetTouchpointId(_request)).Returns(validTouchpointId);
             string warning = $"Unrecognised or invalid entry identified. Customer ID '{invalidId}' , Interaction ID '{validId}' , Action Plan ID '{validId}'";
 
 
@@ -98,7 +102,7 @@ namespace DSS.ActionPlans.Tests.FunctionTests
         {
             // Arrange
             _httpRequestService.Setup(x => x.GetCorrelationId(_request)).Returns(validGuid);
-            _httpRequestService.Setup(x => x.GetTouchpointId(_request)).Returns("0000000001");
+            _httpRequestService.Setup(x => x.GetTouchpointId(_request)).Returns(validTouchpointId);
             string warning = $"Unrecognised or invalid entry identified. Customer ID '{validId}' , Interaction ID '{invalidId}' , Action Plan ID '{validId}'";
 
 
@@ -121,7 +125,7 @@ namespace DSS.ActionPlans.Tests.FunctionTests
         {
             // Arrange
             _httpRequestService.Setup(x => x.GetCorrelationId(_request)).Returns(validGuid);
-            _httpRequestService.Setup(x => x.GetTouchpointId(_request)).Returns("0000000001");
+            _httpRequestService.Setup(x => x.GetTouchpointId(_request)).Returns(validTouchpointId);
             string warning = $"Unrecognised or invalid entry identified. Customer ID '{validId}' , Interaction ID '{validId}' , Action Plan ID '{invalidId}'";
 
 
@@ -144,7 +148,7 @@ namespace DSS.ActionPlans.Tests.FunctionTests
         {
             // Arrange
             _httpRequestService.Setup(x => x.GetCorrelationId(_request)).Returns(validGuid);
-            _httpRequestService.Setup(x => x.GetTouchpointId(_request)).Returns("0000000001");
+            _httpRequestService.Setup(x => x.GetTouchpointId(_request)).Returns(validTouchpointId);
             _genericCosmosDbService.Setup(x => x.RetrieveDocumentAsync<Customer>(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult((Customer)null));
             string warning = $"Customer does not exist with ID '{validId}'";
             //Customer does not exist with ID '7e467bdb-213f-407a-b86a-1954053d3c24'
@@ -168,7 +172,7 @@ namespace DSS.ActionPlans.Tests.FunctionTests
         {
             // Arrange
             _httpRequestService.Setup(x => x.GetCorrelationId(_request)).Returns(validGuid);
-            _httpRequestService.Setup(x => x.GetTouchpointId(_request)).Returns("0000000001");
+            _httpRequestService.Setup(x => x.GetTouchpointId(_request)).Returns(validTouchpointId);
             _genericCosmosDbService.Setup(x => x.RetrieveDocumentAsync<Customer>(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult(validCustomer));
             _genericCosmosDbService.Setup(x => x.RetrieveDocumentAsync<Models.Interaction>(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult((Models.Interaction)null));
             string warning = $"Interaction with ID '{validId}' does not exist";
@@ -192,7 +196,7 @@ namespace DSS.ActionPlans.Tests.FunctionTests
         {
             // Arrange
             _httpRequestService.Setup(x => x.GetCorrelationId(_request)).Returns(validGuid);
-            _httpRequestService.Setup(x => x.GetTouchpointId(_request)).Returns("0000000001");
+            _httpRequestService.Setup(x => x.GetTouchpointId(_request)).Returns(validTouchpointId);
             _genericCosmosDbService.Setup(x => x.RetrieveDocumentAsync<Customer>(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult(validCustomer));
             _genericCosmosDbService.Setup(x => x.RetrieveDocumentAsync<Models.Interaction>(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult(validInteraction));
             _genericCosmosDbService.Setup(x => x.RetrieveDocumentAsync<Models.ActionPlan>(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult((Models.ActionPlan)null));
@@ -217,7 +221,7 @@ namespace DSS.ActionPlans.Tests.FunctionTests
         {
             // Arrange
             _httpRequestService.Setup(x => x.GetCorrelationId(_request)).Returns(validGuid);
-            _httpRequestService.Setup(x => x.GetTouchpointId(_request)).Returns("0000000001");
+            _httpRequestService.Setup(x => x.GetTouchpointId(_request)).Returns(validTouchpointId);
             _genericCosmosDbService.Setup(x => x.RetrieveDocumentAsync<Customer>(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult(validCustomer));
             _genericCosmosDbService.Setup(x => x.RetrieveDocumentAsync<Models.Interaction>(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult(validInteraction));
             _genericCosmosDbService.Setup(x => x.RetrieveDocumentAsync<Models.ActionPlan>(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult(validActionPlan));
