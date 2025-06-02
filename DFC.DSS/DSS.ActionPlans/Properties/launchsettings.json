@@ -1,0 +1,80 @@
+{
+  "profiles": {
+    "AT": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7140",
+      "environmentVariables": {
+        "envHostName": "AT",
+        "cosmosDbUri": "https://dss-at-shared-cdb.documents.azure.com:443",
+        "cosmosDbAccessKey": "<REPLACE ME>",
+        "actionPlanDatabaseName": "actionplans",
+        "actionPlanContainerName": "actionplans",
+        "customerDatabaseName": "customers",
+        "customerContainerName": "customers",
+        "interactionDatabaseName": "interactions",
+        "interactionContainerName": "interactions",
+        "sessionDatabaseName": "sessions",
+        "sessionContainerName": "sessions",
+        "serviceBusConnectionString": "<REPLACE ME>",
+        "serviceBusQueueName": "dss.contentqueue"
+      }
+    },
+    "TEST": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7140",
+      "environmentVariables": {
+        "envHostName": "TEST",
+        "cosmosDbUri": "https://dss-test-shared-cdb.documents.azure.com:443",
+        "cosmosDbAccessKey": "<REPLACE ME>",
+        "actionPlanDatabaseName": "actionplans",
+        "actionPlanContainerName": "actionplans",
+        "customerDatabaseName": "customers",
+        "customerContainerName": "customers",
+        "interactionDatabaseName": "interactions",
+        "interactionContainerName": "interactions",
+        "sessionDatabaseName": "sessions",
+        "sessionContainerName": "sessions",
+        "serviceBusConnectionString": "<REPLACE ME>",
+        "serviceBusQueueName": "dss.contentqueue"
+      }
+    },
+    "OAT": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7140",
+      "environmentVariables": {
+        "envHostName": "OAT",
+        "cosmosDbUri": "https://dss-oat-shared-cdb.documents.azure.com:443",
+        "cosmosDbAccessKey": "<REPLACE ME>",
+        "actionPlanDatabaseName": "actionplans",
+        "actionPlanContainerName": "actionplans",
+        "customerDatabaseName": "customers",
+        "customerContainerName": "customers",
+        "interactionDatabaseName": "interactions",
+        "interactionContainerName": "interactions",
+        "sessionDatabaseName": "sessions",
+        "sessionContainerName": "sessions",
+        "serviceBusConnectionString": "<REPLACE ME>",
+        "serviceBusQueueName": "dss.contentqueue"
+      }
+    },
+    "PP": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7140",
+      "environmentVariables": {
+        "envHostName": "PP",
+        "cosmosDbUri": "https://dss-pp-shared-cdb.documents.azure.com:443",
+        "cosmosDbAccessKey": "<REPLACE ME>",
+        "actionPlanDatabaseName": "actionplans",
+        "actionPlanContainerName": "actionplans",
+        "customerDatabaseName": "customers",
+        "customerContainerName": "customers",
+        "interactionDatabaseName": "interactions",
+        "interactionContainerName": "interactions",
+        "sessionDatabaseName": "sessions",
+        "sessionContainerName": "sessions",
+        "serviceBusConnectionString": "<REPLACE ME>",
+        "serviceBusQueueName": "dss.contentqueue"
+      }
+    }
+  }
+}
