@@ -1,6 +1,5 @@
-﻿using DSS.ActionPlan.Models;
+﻿using DSS.Models.Interfaces;
 using System.ComponentModel.DataAnnotations;
-using DSS.Models.Interfaces;
 
 namespace DSS.ActionPlans.Interfaces
 {

@@ -1,6 +1,6 @@
-﻿using DSS.Models.Interfaces;
-using DSS.ActionPlans.Interfaces;
+﻿using DSS.ActionPlans.Interfaces;
 using DSS.Models.Enums;
+using DSS.Models.Interfaces;
 using System.ComponentModel.DataAnnotations;
 
 namespace DSS.ActionPlan.Validation

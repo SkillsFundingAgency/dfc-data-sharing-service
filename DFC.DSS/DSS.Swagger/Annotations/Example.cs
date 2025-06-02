@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace DSS.Swagger.Annotations
+﻿namespace DSS.Swagger.Annotations
 {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
     public class Example : Attribute

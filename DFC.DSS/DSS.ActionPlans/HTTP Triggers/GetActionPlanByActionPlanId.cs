@@ -1,5 +1,6 @@
 using DSS.Interfaces;
 using DSS.Models;
+using DSS.Swagger.Annotations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
@@ -7,7 +8,6 @@ using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Text.Json;
-using DSS.Swagger.Annotations;
 
 namespace DSS.ActionPlans.HTTP_Triggers
 {
@@ -19,22 +19,23 @@ namespace DSS.ActionPlans.HTTP_Triggers
         private readonly ILogService _logService;
         private readonly IDynamicConverterService _dynamicConverterService;
 
-        #pragma warning disable 8602
+#pragma warning disable 8602
         private readonly string customerDatabaseName = Environment.GetEnvironmentVariable("customerDatabaseName").ToString();
         private readonly string customerContainerName = Environment.GetEnvironmentVariable("customerContainerName").ToString();
         private readonly string interactionDatabaseName = Environment.GetEnvironmentVariable("interactionDatabaseName").ToString();
         private readonly string interactionContainerName = Environment.GetEnvironmentVariable("interactionContainerName").ToString();
         private readonly string actionPlanDatabaseName = Environment.GetEnvironmentVariable("actionPlanDatabaseName").ToString();
         private readonly string actionPlanContainerName = Environment.GetEnvironmentVariable("actionPlanContainerName").ToString();
-        #pragma warning restore 8602
+#pragma warning restore 8602
 
         public GetActionPlanByActionPlanId(
-            ILogger<GetActionPlanByActionPlanId> logger, 
-            IHttpRequestService httpRequestService, 
+            ILogger<GetActionPlanByActionPlanId> logger,
+            IHttpRequestService httpRequestService,
             IGenericCosmosDbService cosmosDbService,
             ILogService logService,
             IDynamicConverterService dynamicConverterService
-        ) {
+        )
+        {
             _logger = logger;
             _httpRequestService = httpRequestService;
             _cosmosDbService = cosmosDbService;
@@ -69,7 +70,7 @@ namespace DSS.ActionPlans.HTTP_Triggers
             bool InteractionIdIsValidGuid = Guid.TryParse(interactionId, out var interactionGuid);
             bool ActionPlanIdIsValidGuid = Guid.TryParse(actionPlanId, out var actionPlanGuid);
             bool queryParamsValidatedSuccessfully = customerIdIsValidGuid && InteractionIdIsValidGuid && ActionPlanIdIsValidGuid;
-            
+
             if (!queryParamsValidatedSuccessfully)
             {
                 _logger.LogWarning("Unrecognised or invalid entry identified. Customer ID '{customerId}' , Interaction ID '{interactionId}' , Action Plan ID '{actionPlanId}'", customerId, interactionId, actionPlanId);
@@ -89,14 +90,14 @@ namespace DSS.ActionPlans.HTTP_Triggers
             }
 
             _logger.LogInformation("Attempting to check if the interaction exists and whether it belongs to the customer");
-            
+
             Interaction? interaction = await _cosmosDbService.RetrieveDocumentAsync<Interaction>(interactionGuid.ToString(), interactionDatabaseName, interactionContainerName);
-            if (interaction == null) 
+            if (interaction == null)
             {
                 _logger.LogWarning("Interaction with ID '{interactionGuid}' does not exist", interactionGuid);
                 _logService.LogFunctionExit(nameof(GetActionPlanByActionPlanId), correlationId);
                 return new NoContentResult();
-            } 
+            }
             else if (interaction.CustomerId != customerGuid)
             {
                 _logger.LogWarning("Interaction with ID '{interactionGuid}' does not belong to customer with ID '{customerGuid}'", interactionGuid, customer);

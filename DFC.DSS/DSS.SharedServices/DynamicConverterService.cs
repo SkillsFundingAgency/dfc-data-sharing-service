@@ -1,5 +1,5 @@
-﻿using System.Dynamic;
-using DSS.Interfaces;
+﻿using DSS.Interfaces;
+using System.Dynamic;
 
 namespace DSS.SharedServices
 {

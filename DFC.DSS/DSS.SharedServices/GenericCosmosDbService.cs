@@ -1,7 +1,6 @@
 ﻿using DSS.Interfaces;
 using DSS.Models;
 using Microsoft.Azure.Cosmos;
-using Microsoft.Azure.Cosmos.Linq;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
@@ -132,7 +131,8 @@ namespace DSS.SharedServices
             }
         }
 
-        public bool IsCustomerReadOnly(Customer customer){
+        public bool IsCustomerReadOnly(Customer customer)
+        {
             return !(customer.DateOfTermination == null);
         }
     }

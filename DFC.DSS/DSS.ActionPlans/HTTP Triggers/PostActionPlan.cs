@@ -1,6 +1,7 @@
-using DSS.Swagger.Annotations;
 using DSS.ActionPlans.Interfaces;
 using DSS.Interfaces;
+using DSS.Models;
+using DSS.Swagger.Annotations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
@@ -8,7 +9,6 @@ using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Text.Json;
-using DSS.Models;
 
 namespace DSS.ActionPlans.HTTP_Triggers
 {
@@ -23,7 +23,7 @@ namespace DSS.ActionPlans.HTTP_Triggers
         private readonly IServiceBusService _serviceBusService;
         private readonly IValidate _validate;
 
-        #pragma warning disable 8602
+#pragma warning disable 8602
         private readonly string customerDatabaseName = Environment.GetEnvironmentVariable("customerDatabaseName").ToString();
         private readonly string customerContainerName = Environment.GetEnvironmentVariable("customerContainerName").ToString();
         private readonly string interactionDatabaseName = Environment.GetEnvironmentVariable("interactionDatabaseName").ToString();
@@ -33,7 +33,7 @@ namespace DSS.ActionPlans.HTTP_Triggers
         private readonly string sessionDatabaseName = Environment.GetEnvironmentVariable("sessionDatabaseName").ToString();
         private readonly string sessionContainerName = Environment.GetEnvironmentVariable("sessionContainerName").ToString();
         private readonly string serviceBusQueueName = Environment.GetEnvironmentVariable("serviceBusQueueName").ToString();
-        #pragma warning restore 8602
+#pragma warning restore 8602
 
         public PostActionPlan(
             ILogger<PostActionPlan> logger,
@@ -114,7 +114,7 @@ namespace DSS.ActionPlans.HTTP_Triggers
 
             Models.ActionPlan actionPlanRequest;
             try
-            {                
+            {
                 _logger.LogInformation("Attempting to get resource from body of the request");
                 actionPlanRequest = await _httpRequestService.GetResourceFromRequest<Models.ActionPlan>(req);
             }
@@ -122,7 +122,7 @@ namespace DSS.ActionPlans.HTTP_Triggers
             {
                 _logger.LogError(ex, "Unable to read request body. Exception: {ExceptionMessage}", ex.Message);
                 _logService.LogFunctionExit(nameof(PostActionPlan), correlationId);
-                return new UnprocessableEntityObjectResult(_dynamicConverterService.ExcludeProperty(ex, ["TargetSite"]));               
+                return new UnprocessableEntityObjectResult(_dynamicConverterService.ExcludeProperty(ex, ["TargetSite"]));
             }
 
             if (actionPlanRequest == null)
@@ -205,7 +205,7 @@ namespace DSS.ActionPlans.HTTP_Triggers
                 return response;
             }
             _logger.LogInformation("Successfully validated {ActionPlanRequest}", nameof(ActionPlan));
-                        
+
             _logger.LogInformation("Attempting to POST Action Plan in Cosmos DB. Action Plan GUID: {ActionPlanGuid}", actionPlanRequest.ActionPlanId);
             var actionPlan = await _genericCosmosDbService.CreateDocumentAsync(actionPlanRequest, actionPlanDatabaseName, actionPlanContainerName);
 
@@ -236,9 +236,9 @@ namespace DSS.ActionPlans.HTTP_Triggers
             }
 
             _logService.LogFunctionExit(nameof(PostActionPlan), correlationId);
-            return new JsonResult(_dynamicConverterService.RenameAndExcludeProperty(actionPlan, "id", "ActionPlanId", "CreatedBy"), new JsonSerializerOptions() { }) 
-            { 
-                StatusCode = (int)HttpStatusCode.Created 
+            return new JsonResult(_dynamicConverterService.RenameAndExcludeProperty(actionPlan, "id", "ActionPlanId", "CreatedBy"), new JsonSerializerOptions() { })
+            {
+                StatusCode = (int)HttpStatusCode.Created
             };
         }
     }

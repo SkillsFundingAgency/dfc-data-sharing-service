@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace DSS.Swagger.Annotations
+﻿namespace DSS.Swagger.Annotations
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
     public class PostRequestBodyAttribute : Attribute

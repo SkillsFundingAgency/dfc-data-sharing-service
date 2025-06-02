@@ -1,6 +1,5 @@
 ﻿using DSS.ActionPlans.Interfaces;
 using DSS.Interfaces;
-using DSS.Models;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Cosmos.Linq;
 using Microsoft.Extensions.Logging;
@@ -34,7 +33,8 @@ namespace DSS.ActionPlans.Services
                 .GetItemLinqQueryable<Models.ActionPlan>()
                 .Where(actionPlan => actionPlan.CustomerId == customerId)
                 .ToFeedIterator()
-            ) {
+            )
+            {
                 while (setIterator.HasMoreResults)
                 {
                     foreach (Models.ActionPlan actionPlan in await setIterator.ReadNextAsync())

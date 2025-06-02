@@ -1,7 +1,7 @@
-using DSS.ActionPlan.Models;
 using DSS.ActionPlans.Interfaces;
 using DSS.Interfaces;
 using DSS.Models;
+using DSS.Swagger.Annotations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
@@ -9,7 +9,6 @@ using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Text.Json;
-using DSS.Swagger.Annotations;
 
 namespace DSS.ActionPlans.HTTP_Triggers
 {
@@ -22,12 +21,12 @@ namespace DSS.ActionPlans.HTTP_Triggers
         private readonly ILogService _logService;
         private readonly IDynamicConverterService _dynamicConverterService;
 
-        #pragma warning disable 8602
+#pragma warning disable 8602
         private readonly string customerDatabaseName = Environment.GetEnvironmentVariable("customerDatabaseName").ToString();
         private readonly string customerContainerName = Environment.GetEnvironmentVariable("customerContainerName").ToString();
         private readonly string actionPlanDatabaseName = Environment.GetEnvironmentVariable("actionPlanDatabaseName").ToString();
         private readonly string actionPlanContainerName = Environment.GetEnvironmentVariable("actionPlanContainerName").ToString();
-        #pragma warning restore 8602
+#pragma warning restore 8602
 
         public GetActionPlansByCustomerId(
             ILogger<GetActionPlansByCustomerId> logger,
@@ -36,11 +35,12 @@ namespace DSS.ActionPlans.HTTP_Triggers
             ICosmosDbService localCosmosDbService,
             ILogService logService,
             IDynamicConverterService dynamicConverterService
-        ) {
+        )
+        {
             _logger = logger;
             _httpRequestService = httpRequestService;
             _genericCosmosDbService = genericCosmosDbService;
-            _localCosmosDbService= localCosmosDbService;
+            _localCosmosDbService = localCosmosDbService;
             _logService = logService;
             _dynamicConverterService = dynamicConverterService;
         }
@@ -96,7 +96,7 @@ namespace DSS.ActionPlans.HTTP_Triggers
                 _logger.LogWarning("Action Plans do not exist for customer with ID '{customerGuid}'", customerGuid);
                 _logService.LogFunctionExit(nameof(GetActionPlansByCustomerId), correlationId);
                 return new NoContentResult();
-            } 
+            }
             else if (actionPlanList.Count() == 1)
             {
                 _logService.LogFunctionExit(nameof(GetActionPlansByCustomerId), correlationId);

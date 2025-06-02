@@ -1,6 +1,4 @@
-﻿using DSS.Models;
-
-namespace DSS.ActionPlans.Interfaces
+﻿namespace DSS.ActionPlans.Interfaces
 {
     public interface ICosmosDbService
     {

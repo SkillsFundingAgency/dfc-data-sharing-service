@@ -1,15 +1,15 @@
+using DSS.ActionPlan.Models;
+using DSS.ActionPlans.Interfaces;
 using DSS.Interfaces;
+using DSS.Models;
+using DSS.Swagger.Annotations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
-using DSS.ActionPlan.Models;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Text.Json;
-using DSS.Models;
-using DSS.ActionPlans.Interfaces;
-using DSS.Swagger.Annotations;
 
 namespace DSS.ActionPlans.HTTP_Triggers
 {
@@ -24,7 +24,7 @@ namespace DSS.ActionPlans.HTTP_Triggers
         private readonly IServiceBusService _serviceBusService;
         private readonly IValidate _validate;
 
-        #pragma warning disable 8602
+#pragma warning disable 8602
         private readonly string customerDatabaseName = Environment.GetEnvironmentVariable("customerDatabaseName").ToString();
         private readonly string customerContainerName = Environment.GetEnvironmentVariable("customerContainerName").ToString();
         private readonly string interactionDatabaseName = Environment.GetEnvironmentVariable("interactionDatabaseName").ToString();
@@ -34,7 +34,7 @@ namespace DSS.ActionPlans.HTTP_Triggers
         private readonly string sessionDatabaseName = Environment.GetEnvironmentVariable("sessionDatabaseName").ToString();
         private readonly string sessionContainerName = Environment.GetEnvironmentVariable("sessionContainerName").ToString();
         private readonly string serviceBusQueueName = Environment.GetEnvironmentVariable("serviceBusQueueName").ToString();
-        #pragma warning restore 8602
+#pragma warning restore 8602
 
         public PatchActionPlan(
              IDynamicConverterService dynamicConverterService,
@@ -120,7 +120,7 @@ namespace DSS.ActionPlans.HTTP_Triggers
                 actionPlanPatchRequest = await _httpRequestService.GetResourceFromRequest<ActionPlanPatch>(req);
             }
             catch (Exception ex)
-            {           
+            {
                 _logger.LogError(ex, "Unable to read request body. Exception: {ExceptionMessage}", ex.Message);
                 _logService.LogFunctionExit(nameof(PatchActionPlan), correlationId);
                 return new UnprocessableEntityObjectResult(_dynamicConverterService.ExcludeProperty(ex, ["TargetSite"]));
@@ -134,7 +134,7 @@ namespace DSS.ActionPlans.HTTP_Triggers
             }
 
             _logger.LogInformation("Retrieved resource from request body");
-                        
+
             _logger.LogInformation("Attempting to set IDs for Action Plan PATCH");
             actionPlanPatchRequest.SetIds(touchpointId, subcontractorId);
             _logger.LogInformation("IDs successfully set for Action Plan PATCH");
@@ -158,24 +158,24 @@ namespace DSS.ActionPlans.HTTP_Triggers
                 var response = new ObjectResult(warning)
                 {
                     StatusCode = (int)HttpStatusCode.Forbidden
-                };                
+                };
                 _logger.LogWarning(warning);
                 _logService.LogFunctionExit(nameof(PatchActionPlan), correlationId);
                 return response;
             }
-                        
+
             _logger.LogInformation("Attempting to get Interaction for Customer. Customer GUID: {CustomerId}. Interaction GUID: {InteractionGuid}", customerGuid, interactionGuid);
             Interaction? interaction = await _genericCosmosDbService.RetrieveDocumentAsync<Interaction>(interactionGuid.ToString(), interactionDatabaseName, interactionContainerName);
             if (interaction == null)
             {
                 _logger.LogWarning("Interaction does not exist. Customer GUID: {CustomerId}. Interaction GUID: {InteractionGuid}", customerGuid, interactionGuid);
-                _logService.LogFunctionExit(nameof(PatchActionPlan), correlationId); 
+                _logService.LogFunctionExit(nameof(PatchActionPlan), correlationId);
                 return new NoContentResult();
             }
             else if (interaction.CustomerId != customerGuid)
             {
                 _logger.LogWarning("Interaction does not belong to the provided customer. Customer GUID: {CustomerId}. Interaction GUID: {InteractionGuid}", customerGuid, interactionGuid);
-                _logService.LogFunctionExit(nameof(PatchActionPlan), correlationId); 
+                _logService.LogFunctionExit(nameof(PatchActionPlan), correlationId);
                 return new NoContentResult();
             }
             _logger.LogInformation("Interaction exists and belongs to the provided customer. Customer GUID: {CustomerId}. Interaction GUID: {InteractionGuid}", customerGuid, interactionGuid);
@@ -185,9 +185,9 @@ namespace DSS.ActionPlans.HTTP_Triggers
             List<Models.ActionPlan> actionPlanList = await _localCosmosDbService.RetrieveActionPlansForCustomerAsync(customerGuid, actionPlanDatabaseName, actionPlanContainerName);
             var actionPlanForCustomer = actionPlanList.FirstOrDefault(a => a.ActionPlanId == actionPlanGuid);
             if (actionPlanForCustomer == null)
-            {                                
+            {
                 _logger.LogWarning("Action Plan does not exist. Customer GUID: {CustomerId}. Action Plan GUID: {ActionPlanGuid}", customerGuid, actionPlanGuid);
-                _logService.LogFunctionExit(nameof(PatchActionPlan), correlationId); 
+                _logService.LogFunctionExit(nameof(PatchActionPlan), correlationId);
                 return new NoContentResult();
             }
 
@@ -233,11 +233,11 @@ namespace DSS.ActionPlans.HTTP_Triggers
                 var er = errors.Select(e => e.ErrorMessage).ToList();
                 var response = new UnprocessableEntityObjectResult(errors);
                 _logger.LogWarning("Failed to validate {ActionPlanValidationObject}", nameof(ActionPlan));
-                _logService.LogFunctionExit(nameof(PatchActionPlan), correlationId); 
+                _logService.LogFunctionExit(nameof(PatchActionPlan), correlationId);
                 return response;
             }
             _logger.LogInformation("Successfully validated {ActionPlanValidationObject}", nameof(ActionPlan));
-                        
+
             _logger.LogInformation("Attempting to PATCH Action Plan in Cosmos DB. Action Plan GUID: {ActionPlanGuid}", actionPlanGuid);
             var updatedActionPlan = await _genericCosmosDbService.ReplaceDocumentAsync(patchedActionPlan, patchedActionPlan.ActionPlanId.ToString(), actionPlanDatabaseName, actionPlanContainerName);
 
@@ -263,14 +263,14 @@ namespace DSS.ActionPlans.HTTP_Triggers
             if (updatedActionPlan == null)
             {
                 _logger.LogWarning("PATCH request unsuccessful. Action Plan GUID: {ActionPlanGuid}", actionPlanGuid);
-                _logService.LogFunctionExit(nameof(PatchActionPlan), correlationId); 
+                _logService.LogFunctionExit(nameof(PatchActionPlan), correlationId);
                 return new BadRequestObjectResult(actionPlanGuid);
             }
 
             _logService.LogFunctionExit(nameof(PatchActionPlan), correlationId);
-            return new JsonResult(_dynamicConverterService.ExcludeProperty(updatedActionPlan, "CreatedBy"), new JsonSerializerOptions()) 
-            { 
-                StatusCode = (int)HttpStatusCode.OK 
+            return new JsonResult(_dynamicConverterService.ExcludeProperty(updatedActionPlan, "CreatedBy"), new JsonSerializerOptions())
+            {
+                StatusCode = (int)HttpStatusCode.OK
             };
         }
     }

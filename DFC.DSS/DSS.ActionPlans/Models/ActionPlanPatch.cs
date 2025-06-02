@@ -1,7 +1,7 @@
-﻿using DSS.Models.Interfaces;
-using DSS.Models.Enums;
-using System.ComponentModel.DataAnnotations;
+﻿using DSS.Models.Enums;
+using DSS.Models.Interfaces;
 using DSS.Swagger.Annotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace DSS.ActionPlan.Models
 {
