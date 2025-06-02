@@ -13,7 +13,8 @@
         "customerContainerName": "customers",
         "interactionDatabaseName": "interactions",
         "interactionContainerName": "interactions",
-        "serviceBusConnectionString": "<REPLACE ME>"
+        "serviceBusConnectionString": "<REPLACE ME>",
+        "serviceBusQueueName": "dss.contentqueue"
       }
     },
     "TEST": {
@@ -29,7 +30,8 @@
         "customerContainerName": "customers",
         "interactionDatabaseName": "interactions",
         "interactionContainerName": "interactions",
-        "serviceBusConnectionString": "<REPLACE ME>"
+        "serviceBusConnectionString": "<REPLACE ME>",
+        "serviceBusQueueName": "dss.contentqueue"
       }
     },
     "OAT": {
@@ -45,7 +47,8 @@
         "customerContainerName": "customers",
         "interactionDatabaseName": "interactions",
         "interactionContainerName": "interactions",
-        "serviceBusConnectionString": "<REPLACE ME>"
+        "serviceBusConnectionString": "<REPLACE ME>",
+        "serviceBusQueueName": "dss.contentqueue"
       }
     },
     "PP": {
@@ -61,7 +64,8 @@
         "customerContainerName": "customers",
         "interactionDatabaseName": "interactions",
         "interactionContainerName": "interactions",
-        "serviceBusConnectionString": "<REPLACE ME>"
+        "serviceBusConnectionString": "<REPLACE ME>",
+        "serviceBusQueueName": "dss.contentqueue"
       }
     }
   }
