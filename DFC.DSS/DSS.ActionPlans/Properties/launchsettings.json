@@ -13,6 +13,8 @@
         "customerContainerName": "customers",
         "interactionDatabaseName": "interactions",
         "interactionContainerName": "interactions",
+        "sessionDatabaseName": "sessions",
+        "sessionContainerName": "sessions",
         "serviceBusConnectionString": "<REPLACE ME>",
         "serviceBusQueueName": "dss.contentqueue"
       }
@@ -30,6 +32,8 @@
         "customerContainerName": "customers",
         "interactionDatabaseName": "interactions",
         "interactionContainerName": "interactions",
+        "sessionDatabaseName": "sessions",
+        "sessionContainerName": "sessions",
         "serviceBusConnectionString": "<REPLACE ME>",
         "serviceBusQueueName": "dss.contentqueue"
       }
@@ -47,6 +51,8 @@
         "customerContainerName": "customers",
         "interactionDatabaseName": "interactions",
         "interactionContainerName": "interactions",
+        "sessionDatabaseName": "sessions",
+        "sessionContainerName": "sessions",
         "serviceBusConnectionString": "<REPLACE ME>",
         "serviceBusQueueName": "dss.contentqueue"
       }
@@ -64,6 +70,8 @@
         "customerContainerName": "customers",
         "interactionDatabaseName": "interactions",
         "interactionContainerName": "interactions",
+        "sessionDatabaseName": "sessions",
+        "sessionContainerName": "sessions",
         "serviceBusConnectionString": "<REPLACE ME>",
         "serviceBusQueueName": "dss.contentqueue"
       }
