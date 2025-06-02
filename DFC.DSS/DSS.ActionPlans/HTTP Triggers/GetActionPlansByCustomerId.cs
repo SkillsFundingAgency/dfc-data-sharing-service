@@ -22,10 +22,12 @@ namespace DSS.ActionPlans.HTTP_Triggers
         private readonly ILogService _logService;
         private readonly IDynamicConverterService _dynamicConverterService;
 
+        #pragma warning disable 8602
         private readonly string customerDatabaseName = Environment.GetEnvironmentVariable("customerDatabaseName").ToString();
         private readonly string customerContainerName = Environment.GetEnvironmentVariable("customerContainerName").ToString();
         private readonly string actionPlanDatabaseName = Environment.GetEnvironmentVariable("actionPlanDatabaseName").ToString();
         private readonly string actionPlanContainerName = Environment.GetEnvironmentVariable("actionPlanContainerName").ToString();
+        #pragma warning restore 8602
 
         public GetActionPlansByCustomerId(
             ILogger<GetActionPlansByCustomerId> logger,
@@ -79,7 +81,7 @@ namespace DSS.ActionPlans.HTTP_Triggers
             _logger.LogInformation("HTTP request validation successful. Customer ID '{customerGuid}'", customerGuid);
             _logger.LogInformation("Attempting to check if the customer exists");
 
-            Customer customer = await _genericCosmosDbService.RetrieveDocumentAsync<Customer>(customerGuid.ToString(), customerDatabaseName, customerContainerName);
+            Customer? customer = await _genericCosmosDbService.RetrieveDocumentAsync<Customer>(customerGuid.ToString(), customerDatabaseName, customerContainerName);
             if (customer == null)
             {
                 _logger.LogWarning("Customer does not exist with ID '{customerGuid}'", customerGuid);

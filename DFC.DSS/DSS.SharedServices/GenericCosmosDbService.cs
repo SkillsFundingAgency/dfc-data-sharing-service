@@ -20,8 +20,14 @@ namespace DSS.SharedServices
             _logService = logService;
         }
 
-        public async Task<T> RetrieveDocumentAsync<T>(string documentId, string databaseName, string containerName)
+        public async Task<T?> RetrieveDocumentAsync<T>(string? documentId, string databaseName, string containerName)
         {
+            if (documentId == null)
+            {
+                _logger.LogWarning($"No document provided");
+                _logService.LogMethodExit(nameof(RetrieveDocumentAsync).ToString());
+                return default;
+            }
             _logService.LogMethodInvocation(nameof(RetrieveDocumentAsync).ToString());
             _logger.LogInformation($"Attempting to retrieve container '{containerName}' from database '{databaseName}'");
 
@@ -52,7 +58,7 @@ namespace DSS.SharedServices
             }
         }
 
-        public async Task<T> CreateDocumentAsync<T>(T newDocumentObject, string databaseName, string containerName)
+        public async Task<T?> CreateDocumentAsync<T>(T newDocumentObject, string databaseName, string containerName)
         {
             _logService.LogMethodInvocation(nameof(CreateDocumentAsync).ToString());
             _logger.LogInformation($"Attempting to retrieve container '{containerName}' from database '{databaseName}'");
@@ -88,7 +94,7 @@ namespace DSS.SharedServices
             }
         }
 
-        public async Task<T> ReplaceDocumentAsync<T>(T updatedDocumentObject, string existingDocumentId, string databaseName, string containerName)
+        public async Task<T?> ReplaceDocumentAsync<T>(T updatedDocumentObject, string? existingDocumentId, string databaseName, string containerName)
         {
             _logService.LogMethodInvocation(nameof(ReplaceDocumentAsync).ToString());
             _logger.LogInformation($"Attempting to retrieve container '{containerName}' from database '{databaseName}'");

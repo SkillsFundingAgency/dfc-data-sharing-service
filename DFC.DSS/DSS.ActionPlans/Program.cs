@@ -54,7 +54,7 @@ namespace DSS.ActionPlans
                    });
                })
                .Build();
-            host.Run();
+            await host.RunAsync();
         }
     }
 }

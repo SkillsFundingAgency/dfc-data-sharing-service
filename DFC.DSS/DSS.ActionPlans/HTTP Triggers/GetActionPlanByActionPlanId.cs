@@ -19,12 +19,14 @@ namespace DSS.ActionPlans.HTTP_Triggers
         private readonly ILogService _logService;
         private readonly IDynamicConverterService _dynamicConverterService;
 
+        #pragma warning disable 8602
         private readonly string customerDatabaseName = Environment.GetEnvironmentVariable("customerDatabaseName").ToString();
         private readonly string customerContainerName = Environment.GetEnvironmentVariable("customerContainerName").ToString();
         private readonly string interactionDatabaseName = Environment.GetEnvironmentVariable("interactionDatabaseName").ToString();
         private readonly string interactionContainerName = Environment.GetEnvironmentVariable("interactionContainerName").ToString();
         private readonly string actionPlanDatabaseName = Environment.GetEnvironmentVariable("actionPlanDatabaseName").ToString();
         private readonly string actionPlanContainerName = Environment.GetEnvironmentVariable("actionPlanContainerName").ToString();
+        #pragma warning restore 8602
 
         public GetActionPlanByActionPlanId(
             ILogger<GetActionPlanByActionPlanId> logger, 
@@ -78,7 +80,7 @@ namespace DSS.ActionPlans.HTTP_Triggers
             _logger.LogInformation("HTTP request validation successful. Customer ID '{customerGuid}' , Interaction ID '{interactionGuid}' , Action Plan ID '{actionPlanGuid}'", customerId, interactionId, actionPlanId);
             _logger.LogInformation("Attempting to check if the customer exists");
 
-            Customer customer = await _cosmosDbService.RetrieveDocumentAsync<Customer>(customerGuid.ToString(), customerDatabaseName, customerContainerName);
+            Customer? customer = await _cosmosDbService.RetrieveDocumentAsync<Customer>(customerGuid.ToString(), customerDatabaseName, customerContainerName);
             if (customer == null)
             {
                 _logger.LogWarning("Customer does not exist with ID '{customerGuid}'", customerGuid);
@@ -88,7 +90,7 @@ namespace DSS.ActionPlans.HTTP_Triggers
 
             _logger.LogInformation("Attempting to check if the interaction exists and whether it belongs to the customer");
             
-            Interaction interaction = await _cosmosDbService.RetrieveDocumentAsync<Interaction>(interactionGuid.ToString(), interactionDatabaseName, interactionContainerName);
+            Interaction? interaction = await _cosmosDbService.RetrieveDocumentAsync<Interaction>(interactionGuid.ToString(), interactionDatabaseName, interactionContainerName);
             if (interaction == null) 
             {
                 _logger.LogWarning("Interaction with ID '{interactionGuid}' does not exist", interactionGuid);
@@ -103,7 +105,7 @@ namespace DSS.ActionPlans.HTTP_Triggers
             }
 
             _logger.LogInformation("Attempting to retrieve action plan and confirm whether it belongs to the customer");
-            Models.ActionPlan actionPlan = await _cosmosDbService.RetrieveDocumentAsync<Models.ActionPlan>(actionPlanGuid.ToString(), actionPlanDatabaseName, actionPlanContainerName);
+            Models.ActionPlan? actionPlan = await _cosmosDbService.RetrieveDocumentAsync<Models.ActionPlan>(actionPlanGuid.ToString(), actionPlanDatabaseName, actionPlanContainerName);
             if (actionPlan == null)
             {
                 _logger.LogWarning("Action Plan does not exist with ID '{actionPlanGuid}'", actionPlanGuid);

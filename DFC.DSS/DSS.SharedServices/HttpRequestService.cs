@@ -50,7 +50,9 @@ namespace DSS.SharedServices
 
             var requestBody = await new StreamReader(request.Body).ReadToEndAsync();
 
+#pragma warning disable CS8603 // Possible null reference return.
             return JsonConvert.DeserializeObject<T>(requestBody);
+#pragma warning restore CS8603 // Possible null reference return.
         }
     }
 }

@@ -24,6 +24,7 @@ namespace DSS.ActionPlans.HTTP_Triggers
         private readonly IServiceBusService _serviceBusService;
         private readonly IValidate _validate;
 
+        #pragma warning disable 8602
         private readonly string customerDatabaseName = Environment.GetEnvironmentVariable("customerDatabaseName").ToString();
         private readonly string customerContainerName = Environment.GetEnvironmentVariable("customerContainerName").ToString();
         private readonly string interactionDatabaseName = Environment.GetEnvironmentVariable("interactionDatabaseName").ToString();
@@ -33,6 +34,7 @@ namespace DSS.ActionPlans.HTTP_Triggers
         private readonly string sessionDatabaseName = Environment.GetEnvironmentVariable("sessionDatabaseName").ToString();
         private readonly string sessionContainerName = Environment.GetEnvironmentVariable("sessionContainerName").ToString();
         private readonly string serviceBusQueueName = Environment.GetEnvironmentVariable("serviceBusQueueName").ToString();
+        #pragma warning restore 8602
 
         public PatchActionPlan(
              IDynamicConverterService dynamicConverterService,
@@ -138,7 +140,7 @@ namespace DSS.ActionPlans.HTTP_Triggers
             _logger.LogInformation("IDs successfully set for Action Plan PATCH");
 
             _logger.LogInformation("Attempting to check if customer exists. Customer GUID: {CustomerId}", customerGuid);
-            Customer customer = await _genericCosmosDbService.RetrieveDocumentAsync<Customer>(customerGuid.ToString(), customerDatabaseName, customerContainerName);
+            Customer? customer = await _genericCosmosDbService.RetrieveDocumentAsync<Customer>(customerGuid.ToString(), customerDatabaseName, customerContainerName);
             if (customer == null)
             {
                 _logger.LogWarning("Customer does not exist with ID '{customerGuid}'", customerGuid);
@@ -163,7 +165,7 @@ namespace DSS.ActionPlans.HTTP_Triggers
             }
                         
             _logger.LogInformation("Attempting to get Interaction for Customer. Customer GUID: {CustomerId}. Interaction GUID: {InteractionGuid}", customerGuid, interactionGuid);
-            Interaction interaction = await _genericCosmosDbService.RetrieveDocumentAsync<Interaction>(interactionGuid.ToString(), interactionDatabaseName, interactionContainerName);
+            Interaction? interaction = await _genericCosmosDbService.RetrieveDocumentAsync<Interaction>(interactionGuid.ToString(), interactionDatabaseName, interactionContainerName);
             if (interaction == null)
             {
                 _logger.LogWarning("Interaction does not exist. Customer GUID: {CustomerId}. Interaction GUID: {InteractionGuid}", customerGuid, interactionGuid);
@@ -209,7 +211,7 @@ namespace DSS.ActionPlans.HTTP_Triggers
                 CustomerSatisfaction = actionPlanPatchRequest.CustomerSatisfaction ?? actionPlanForCustomer.CustomerSatisfaction
             };
 
-            Session session = await _genericCosmosDbService.RetrieveDocumentAsync<Session>(patchedActionPlan.SessionId.ToString(), sessionDatabaseName, sessionContainerName);
+            Session? session = await _genericCosmosDbService.RetrieveDocumentAsync<Session>(patchedActionPlan.SessionId.ToString(), sessionDatabaseName, sessionContainerName);
             if (session == null)
             {
                 _logger.LogWarning("Session does not exist. Customer GUID: {CustomerId}. Session GUID: {SessionGuid}", customerGuid, patchedActionPlan.SessionId);

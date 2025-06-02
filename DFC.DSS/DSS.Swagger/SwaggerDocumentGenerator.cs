@@ -18,7 +18,7 @@ namespace DSS.Swagger
         private bool IncludeSubcontractorId;
         private bool IncludeTouchpointId;
 
-        public string GenerateSwaggerDocument(HttpRequest req, string apiTitle, string apiDescription, string apiDefinitionName, string apiVersion, Assembly assembly, bool includeSubcontractorId = true, bool includeTouchpointId = true, string pathPrefix = "/api/")
+        public string GenerateSwaggerDocument(HttpRequest req, string? apiTitle, string? apiDescription, string? apiDefinitionName, string? apiVersion, Assembly assembly, bool includeSubcontractorId = true, bool includeTouchpointId = true, string? pathPrefix = "/api/")
         {
             IncludeSubcontractorId = includeSubcontractorId;
             IncludeTouchpointId = includeTouchpointId;
@@ -72,7 +72,7 @@ namespace DSS.Swagger
             return securityDefinitions;
         }
 
-        private dynamic GeneratePaths(Assembly assembly, dynamic doc, string apiTitle, string apiDefinitionName, string pathPrefix)
+        private dynamic GeneratePaths(Assembly assembly, dynamic doc, string? apiTitle, string? apiDefinitionName, string? pathPrefix)
         {
             dynamic paths = new ExpandoObject();
             var methods = assembly.GetTypes()
@@ -92,7 +92,7 @@ namespace DSS.Swagger
 
                 if (functionAttr.Name == apiDefinitionName) continue;
 
-                HttpTriggerAttribute triggerAttribute = null;
+                HttpTriggerAttribute? triggerAttribute = null;
                 foreach (ParameterInfo parameter in methodInfo.GetParameters())
                 {
                     triggerAttribute = parameter.GetCustomAttributes(typeof(HttpTriggerAttribute), false)
@@ -140,20 +140,20 @@ namespace DSS.Swagger
             return paths;
         }
 
-        private string GetFunctionDescription(MethodInfo methodInfo, string funcName)
+        private string GetFunctionDescription(MethodInfo methodInfo, string? funcName)
         {
-            var displayAttr = (DisplayAttribute)methodInfo.GetCustomAttributes(typeof(DisplayAttribute), false)
-                .SingleOrDefault();
+            var displayAttr = methodInfo.GetCustomAttributes(typeof(DisplayAttribute), false)
+                .SingleOrDefault() as DisplayAttribute;
             return !string.IsNullOrWhiteSpace(displayAttr?.Description) ? displayAttr.Description : $"This function will run {funcName}";
         }
 
         /// <summary>
         /// Max 80 characters in summary/title
         /// </summary>
-        private string GetFunctionName(MethodInfo methodInfo, string funcName)
+        private string GetFunctionName(MethodInfo methodInfo, string? funcName)
         {
-            var displayAttr = (DisplayAttribute)methodInfo.GetCustomAttributes(typeof(DisplayAttribute), false)
-                .SingleOrDefault();
+            var displayAttr = methodInfo.GetCustomAttributes(typeof(DisplayAttribute), false)
+                .SingleOrDefault() as DisplayAttribute;
             if (!string.IsNullOrWhiteSpace(displayAttr?.Name))
             {
                 return displayAttr.Name.Length > 80 ? displayAttr.Name.Substring(0, 80) : displayAttr.Name;
@@ -163,8 +163,8 @@ namespace DSS.Swagger
 
         private string GetPropertyDescription(PropertyInfo propertyInfo)
         {
-            var displayAttr = (DisplayAttribute)propertyInfo.GetCustomAttributes(typeof(DisplayAttribute), false)
-                .SingleOrDefault();
+            var displayAttr = propertyInfo.GetCustomAttributes(typeof(DisplayAttribute), false)
+                .SingleOrDefault() as DisplayAttribute; ;
 
             return !string.IsNullOrWhiteSpace(displayAttr?.Description) ? displayAttr.Description : $"This returns {propertyInfo.PropertyType.Name}";
         }
@@ -185,8 +185,8 @@ namespace DSS.Swagger
             }
             if (returnType == typeof(IActionResult) || returnType == typeof(HttpResponseMessage))
             {
-                var responseTypeAttr = (ProducesResponseTypeAttribute)methodInfo
-                    .GetCustomAttributes(typeof(ProducesResponseTypeAttribute), false).FirstOrDefault();
+                var responseTypeAttr = methodInfo
+                    .GetCustomAttributes(typeof(ProducesResponseTypeAttribute), false).FirstOrDefault() as ProducesResponseTypeAttribute;
                 if (responseTypeAttr != null)
                 {
                     returnType = responseTypeAttr.Type;
@@ -288,7 +288,9 @@ namespace DSS.Swagger
 
                 AddToExpando(opParam.schema, "$ref", $"#/definitions/{postBody?.Type.Name}");
                 parameterSignatures.Add(opParam);
+#pragma warning disable CS8604 // Possible null reference argument.
                 AddParameterDefinition((IDictionary<string, object>)doc.definitions, postBody?.Type);
+#pragma warning restore CS8604 // Possible null reference argument.
             }
 
             foreach (ParameterInfo parameter in methodInfo.GetParameters())
@@ -342,7 +344,7 @@ namespace DSS.Swagger
             return parameterSignatures;
         }
 
-        private void AddObjectProperties(Type t, string parentName, List<object> parameterSignatures, dynamic doc)
+        private void AddObjectProperties(Type t, string? parentName, List<object> parameterSignatures, dynamic doc)
         {
             var publicProperties = t.GetProperties(BindingFlags.Public | BindingFlags.Instance);
             foreach (PropertyInfo property in publicProperties)
@@ -371,14 +373,14 @@ namespace DSS.Swagger
 
         private void AddParameterDefinition(IDictionary<string, object> definitions, Type parameterType)
         {
-            if (!definitions.TryGetValue(parameterType.Name, out dynamic objDef))
+            if (!definitions.TryGetValue(parameterType.Name, out var objDef))
             {
                 objDef = GetObjectSchemaDefinition(definitions, parameterType);
                 definitions.Add(parameterType.Name, objDef);
             }
         }
 
-        private dynamic GetObjectSchemaDefinition(IDictionary<string, object> definitions, Type parameterType)
+        private dynamic GetObjectSchemaDefinition(IDictionary<string, object>? definitions, Type parameterType)
         {
             dynamic objDef = new ExpandoObject();
             objDef.type = "object";
@@ -395,18 +397,18 @@ namespace DSS.Swagger
                 dynamic propDef = new ExpandoObject();
                 propDef.description = GetPropertyDescription(property);
 
-                var stringAttribute = (StringLengthAttribute)property.GetCustomAttributes(typeof(StringLengthAttribute), false).FirstOrDefault();
+                var stringAttribute = property.GetCustomAttributes(typeof(StringLengthAttribute), false).FirstOrDefault() as StringLengthAttribute;
                 if (stringAttribute != null)
                 {
                     propDef.maxLength = stringAttribute.MaximumLength;
                     propDef.minLength = stringAttribute.MinimumLength;
                 }
 
-                var regexAttribute = (RegularExpressionAttribute)property.GetCustomAttributes(typeof(RegularExpressionAttribute), false).FirstOrDefault();
+                var regexAttribute = property.GetCustomAttributes(typeof(RegularExpressionAttribute), false).FirstOrDefault() as RegularExpressionAttribute;
                 if (regexAttribute != null)
                     propDef.pattern = regexAttribute.Pattern;
 
-                var exampleAttribute = (Example)property.GetCustomAttributes(typeof(Example), false).FirstOrDefault();
+                var exampleAttribute = property.GetCustomAttributes(typeof(Example), false).FirstOrDefault() as Example;
 
                 SetParameterType(property.PropertyType, propDef, definitions, exampleAttribute?.Description);
                 AddToExpando(objDef.properties, property.Name, propDef);
@@ -418,7 +420,7 @@ namespace DSS.Swagger
             return objDef;
         }
 
-        private void SetParameterType(Type parameterType, dynamic opParam, dynamic definitions, string exampleDescription = "")
+        private void SetParameterType(Type parameterType, dynamic opParam, dynamic? definitions, string? exampleDescription = "")
         {
             var inputType = parameterType;
             string paramType = parameterType.UnderlyingSystemType.ToString();
@@ -436,7 +438,9 @@ namespace DSS.Swagger
 
                 if (inputType.IsArray)
                 {
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
                     parameterType = parameterType.GetElementType();
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
                 }
                 else if (inputType.IsGenericType && inputType.GenericTypeArguments.Length == 1)
                 {
@@ -561,7 +565,9 @@ namespace DSS.Swagger
                     {
                         foreach (var item in Enum.GetValues(enumType))
                         {
+#pragma warning disable CS8604 // Possible null reference argument.
                             var memInfo = Nullable.GetUnderlyingType(inputType)?.GetMember(item.ToString());
+#pragma warning restore CS8604 // Possible null reference argument.
                             var descriptionAttributes =
                                 memInfo?[0].GetCustomAttributes(typeof(DescriptionAttribute), false);
 
@@ -583,7 +589,9 @@ namespace DSS.Swagger
             }
             else if (definitions != null)
             {
-                AddToExpando(setObject, "$ref", "#/definitions/" + parameterType.Name);
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+                AddToExpando(setObject, "$ref", $"#/definitions/{parameterType.Name}");
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
                 AddParameterDefinition((IDictionary<string, object>)definitions, parameterType);
             }
         }
@@ -595,10 +603,10 @@ namespace DSS.Swagger
 
         private void AddToExpando(ExpandoObject obj, string name, object value)
         {
-            if (((IDictionary<string, object>)obj).ContainsKey(name))
+            if ((obj as IDictionary<string, object>).ContainsKey(name))
             {
                 // Fix for functions with same routes but different verbs
-                var existing = (IDictionary<string, object>)((IDictionary<string, object>)obj)[name];
+                var existing = (IDictionary<string, object>)(obj as IDictionary<string, object>)[name];
                 var append = (IDictionary<string, object>)value;
                 foreach (KeyValuePair<string, object> keyValuePair in append)
                 {
@@ -607,7 +615,7 @@ namespace DSS.Swagger
             }
             else
             {
-                ((IDictionary<string, object>)obj).Add(name, value);
+                (obj as IDictionary<string, object>).Add(name, value);
             }
         }
     }

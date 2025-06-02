@@ -5,7 +5,7 @@ namespace DSS.SharedServices
 {
     public class DynamicConverterService : IDynamicConverterService
     {
-        public ExpandoObject RenameAndExcludeProperty<T>(T model, string oldname, string newName, string exclName)
+        public ExpandoObject RenameAndExcludeProperty<T>(T model, string? oldname, string newName, string? exclName)
         {
             var updatedObject = new ExpandoObject();
             foreach (var item in typeof(T).GetProperties())
@@ -15,11 +15,13 @@ namespace DSS.SharedServices
                 var itemName = item.Name;
                 if (itemName == oldname)
                     itemName = newName;
+#pragma warning disable CS8604 // Possible null reference argument.
                 AddProperty(updatedObject, itemName, item.GetValue(model));
+#pragma warning restore CS8604 // Possible null reference argument.
             }
             return updatedObject;
         }
-        public ExpandoObject RenameProperty<T>(T model, string name, string newName)
+        public ExpandoObject RenameProperty<T>(T model, string? name, string newName)
         {
             var updatedObject = new ExpandoObject();
             foreach (var item in typeof(T).GetProperties())
@@ -27,7 +29,9 @@ namespace DSS.SharedServices
                 var itemName = item.Name;
                 if (itemName == name)
                     itemName = newName;
+#pragma warning disable CS8604 // Possible null reference argument.
                 AddProperty(updatedObject, itemName, item.GetValue(model));
+#pragma warning restore CS8604 // Possible null reference argument.
             }
             return updatedObject;
         }
@@ -41,7 +45,7 @@ namespace DSS.SharedServices
 
             return updatedObjects;
         }
-        public ExpandoObject ExcludeProperty<T>(T model, string name)
+        public ExpandoObject ExcludeProperty<T>(T model, string? name)
         {
             dynamic updatedObject = new ExpandoObject();
             foreach (var item in typeof(T).GetProperties())

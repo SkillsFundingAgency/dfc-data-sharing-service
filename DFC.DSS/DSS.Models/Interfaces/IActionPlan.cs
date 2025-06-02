@@ -10,9 +10,9 @@ namespace DSS.Models.Interfaces
         DateTime? DateActionPlanSentToCustomer { get; set; }
         ActionPlanDeliveryMethod? ActionPlanDeliveryMethod { get; set; }
         DateTime? DateActionPlanAcknowledged { get; set; }
-        string CurrentSituation { get; set; }
+        string? CurrentSituation { get; set; }
         DateTime? LastModifiedDate { get; set; }
-        string LastModifiedTouchpointId { get; set; }
+        string? LastModifiedTouchpointId { get; set; }
         CustomerSatisfaction? CustomerSatisfaction { get; set; }
 
         void SetDefaultValues();
