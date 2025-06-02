@@ -126,7 +126,7 @@ namespace DSS.SharedServices
         }
 
         public bool IsCustomerReadOnly(Customer customer){
-            return !customer.DateOfTermination.IsNull();
+            return !(customer.DateOfTermination == null);
         }
     }
 }
