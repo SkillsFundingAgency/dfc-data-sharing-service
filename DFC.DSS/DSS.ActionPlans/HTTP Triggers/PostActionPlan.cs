@@ -88,7 +88,7 @@ namespace DSS.ActionPlans.HTTP_Triggers
             {
                 _logger.LogWarning("Unable to locate 'apimURL' in request header");
                 _logService.LogFunctionExit(nameof(PostActionPlan), correlationId);
-                return new BadRequestObjectResult("nable to locate 'apimurl' in request header");
+                return new BadRequestObjectResult("Unable to locate 'apimURL' in request header");
             }
 
             var subcontractorId = _httpRequestService.GetSubcontractorId(req);
@@ -104,8 +104,8 @@ namespace DSS.ActionPlans.HTTP_Triggers
             if (!queryParamsValidatedSuccessfully)
             {
                 _logger.LogWarning("Unrecognised or invalid entry identified. Customer ID '{customerId}' , Interaction ID '{interactionId}'", customerId, interactionId);
-                _logService.LogFunctionExit(nameof(GetActionPlanByActionPlanId), correlationId);
-                return new BadRequestObjectResult("Unrecognised or invalid entry identified (Customer ID, Interaction ID and/or Action Plan ID)");
+                _logService.LogFunctionExit(nameof(PostActionPlan), correlationId);
+                return new BadRequestObjectResult("Unrecognised or invalid entry identified (Customer ID and/or Interaction ID)");
             }
 
             _logger.LogInformation("HTTP request validation successful. Customer ID '{customerGuid}' , Interaction ID '{interactionGuid}'", customerId, interactionId);
@@ -150,11 +150,12 @@ namespace DSS.ActionPlans.HTTP_Triggers
 
             if (isCustomerReadOnly)
             {
-                var response = new ObjectResult(customerGuid)
+                string warning = $"Customer is read-only. Customer GUID: {customerGuid}";
+                var response = new ObjectResult(warning)
                 {
                     StatusCode = (int)HttpStatusCode.Forbidden
                 };
-                _logger.LogWarning("Customer is read-only. Customer GUID: {CustomerId}", customerGuid);
+                _logger.LogWarning(warning);
                 _logService.LogFunctionExit(nameof(PostActionPlan), correlationId);
                 return response;
             }

@@ -88,7 +88,7 @@ namespace DSS.ActionPlans.HTTP_Triggers
             {
                 _logger.LogWarning("Unable to locate 'apimURL' in request header");
                 _logService.LogFunctionExit(nameof(PatchActionPlan), correlationId);
-                return new BadRequestObjectResult("Unable to locate 'apimurl' in request header");
+                return new BadRequestObjectResult("Unable to locate 'apimURL' in request header");
             }
 
             var subcontractorId = _httpRequestService.GetSubcontractorId(req);
@@ -152,11 +152,12 @@ namespace DSS.ActionPlans.HTTP_Triggers
 
             if (isCustomerReadOnly)
             {
-                var response = new ObjectResult(customerGuid)
+                string warning = $"Customer is read-only. Customer GUID: {customerGuid}";
+                var response = new ObjectResult(warning)
                 {
                     StatusCode = (int)HttpStatusCode.Forbidden
                 };                
-                _logger.LogWarning("Customer is read-only. Customer GUID: {CustomerId}", customerGuid);
+                _logger.LogWarning(warning);
                 _logService.LogFunctionExit(nameof(PatchActionPlan), correlationId);
                 return response;
             }
