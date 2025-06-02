@@ -22,7 +22,7 @@ namespace DSS.ActionPlans.Services
 
         public async Task<List<Models.ActionPlan>> RetrieveActionPlansForCustomerAsync(Guid customerId, string databaseName, string containerName)
         {
-            _logger.LogInformation($"Method '{nameof(RetrieveActionPlansForCustomerAsync)}' has been invoked");
+            _logService.LogMethodInvocation(nameof(RetrieveActionPlansForCustomerAsync));
             _logger.LogInformation($"Attempting to retrieve container '{containerName}' from database '{databaseName}'");
 
             Container cosmosDbContainer = _cosmosDbClient.GetContainer(databaseName, containerName);

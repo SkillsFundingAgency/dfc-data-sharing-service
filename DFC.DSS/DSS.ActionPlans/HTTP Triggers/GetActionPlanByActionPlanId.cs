@@ -60,7 +60,7 @@ namespace DSS.ActionPlans.HTTP_Triggers
 
             if (string.IsNullOrWhiteSpace(touchpointId))
             {
-                _logger.LogWarning("Unable to locate 'TouchpointId' in request header");
+                _logService.LogUnableToLocateInHeader("TouchpointId");
                 _logService.LogFunctionExit(nameof(GetActionPlanByActionPlanId), correlationId);
                 return new BadRequestObjectResult("Unable to locate 'TouchpointId' in request header");
             }
