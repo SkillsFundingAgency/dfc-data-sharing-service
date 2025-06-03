@@ -21,7 +21,6 @@ namespace DSS.SharedServices
 
         public async Task<T?> RetrieveDocumentAsync<T>(string? documentId, string databaseName, string containerName)
         {
-            _logService.LogMethodInvocation(nameof(RetrieveDocumentAsync));
             if (documentId == null)
             {
                 _logger.LogWarning($"No document provided");

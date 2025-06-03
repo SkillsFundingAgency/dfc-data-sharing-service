@@ -80,7 +80,7 @@ namespace DSS.ActionPlans.HTTP_Triggers
 
             if (string.IsNullOrWhiteSpace(touchpointId))
             {
-                _logService.LogUnableToLocateInHeader("TouchpointId");
+                _logger.LogWarning("Unable to locate 'TouchpointId' in request header");
                 _logService.LogFunctionExit(nameof(PatchActionPlan), correlationId);
                 return new BadRequestObjectResult("Unable to locate 'TouchpointId' in request header");
             }
@@ -88,7 +88,7 @@ namespace DSS.ActionPlans.HTTP_Triggers
             var apimUrl = _httpRequestService.GetApimUrl(req);
             if (string.IsNullOrEmpty(apimUrl))
             {
-                _logService.LogUnableToLocateInHeader("apimURL");
+                _logger.LogWarning("Unable to locate 'apimURL' in request header");
                 _logService.LogFunctionExit(nameof(PostActionPlan), correlationId);
                 return new BadRequestObjectResult("Unable to locate 'apimURL' in request header");
             }

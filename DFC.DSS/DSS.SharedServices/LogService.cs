@@ -30,10 +30,5 @@ namespace DSS.SharedServices
         {
             _logger.LogInformation("Function '{FunctionName}' has been invoked", nameOfFunction);
         }
-
-        public void LogUnableToLocateInHeader(string nameOfHeader)
-        {
-            _logger.LogWarning("Unable to locate '{HeaderName}' in request header", nameOfHeader);
-        }
     }
 }
