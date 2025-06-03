@@ -21,13 +21,13 @@ namespace DSS.SharedServices
 
         public async Task<T?> RetrieveDocumentAsync<T>(string? documentId, string databaseName, string containerName)
         {
+            _logService.LogMethodInvocation(nameof(RetrieveDocumentAsync).ToString());
             if (documentId == null)
             {
                 _logger.LogWarning($"No document provided");
                 _logService.LogMethodExit(nameof(RetrieveDocumentAsync).ToString());
                 return default;
             }
-            _logService.LogMethodInvocation(nameof(RetrieveDocumentAsync).ToString());
             _logger.LogInformation($"Attempting to retrieve container '{containerName}' from database '{databaseName}'");
 
             Container cosmosDbContainer = _cosmosDbClient.GetContainer(databaseName, containerName);
