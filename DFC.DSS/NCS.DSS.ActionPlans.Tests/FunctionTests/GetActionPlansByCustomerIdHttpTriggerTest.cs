@@ -3,6 +3,7 @@ using DSS.ActionPlans.HTTP_Triggers;
 using DSS.ActionPlans.Interfaces;
 using DSS.Interfaces;
 using DSS.Models;
+using DSS.SharedServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -19,6 +20,7 @@ namespace DSS.ActionPlans.Tests.FunctionTests
         private Guid validGuid = new Guid();
         private Customer validCustomer;
         private Models.ActionPlan validActionPlan;
+        private const string validTouchpointId = "0000000001";
 
         private Mock<ILogService> _log;
         private HttpRequest _request;
@@ -27,6 +29,7 @@ namespace DSS.ActionPlans.Tests.FunctionTests
         private Mock<IGenericCosmosDbService> _genericCosmosDbService;
         private GetActionPlansByCustomerId _function;
         private Mock<ICosmosDbService> _actionPlansCosmosDbService;
+        private DynamicConverterService _dynamicConverterService;
 
         [SetUp]
         public void Setup()
@@ -45,7 +48,8 @@ namespace DSS.ActionPlans.Tests.FunctionTests
             _genericCosmosDbService = new Mock<IGenericCosmosDbService>();
             _log = new Mock<ILogService>();
             _actionPlansCosmosDbService = new Mock<ICosmosDbService>();
-            _function = new GetActionPlansByCustomerId(_logger.Object, _httpRequestService.Object, _genericCosmosDbService.Object, _actionPlansCosmosDbService.Object, _log.Object);
+            _dynamicConverterService = new DynamicConverterService();
+            _function = new GetActionPlansByCustomerId(_logger.Object, _httpRequestService.Object, _genericCosmosDbService.Object, _actionPlansCosmosDbService.Object, _log.Object, _dynamicConverterService);
         }
 
         [Test]
@@ -53,7 +57,7 @@ namespace DSS.ActionPlans.Tests.FunctionTests
         {
             // Arrange
             _httpRequestService.Setup(x => x.GetCorrelationId(_request)).Returns(validGuid);
-            _httpRequestService.Setup(x => x.GetTouchpointId(_request)).Returns("0000000001");
+            _httpRequestService.Setup(x => x.GetTouchpointId(_request)).Returns(validTouchpointId);
             string warning = $"Unrecognised or invalid entry identified. Customer ID '{invalidIdString}'";
 
             // Act
@@ -75,7 +79,7 @@ namespace DSS.ActionPlans.Tests.FunctionTests
         {
             // Arrange
             _httpRequestService.Setup(x => x.GetCorrelationId(_request)).Returns(validGuid);
-            _httpRequestService.Setup(x => x.GetTouchpointId(_request)).Returns("0000000001");
+            _httpRequestService.Setup(x => x.GetTouchpointId(_request)).Returns(validTouchpointId);
             _genericCosmosDbService.Setup(x => x.RetrieveDocumentAsync<Customer>(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult((Customer)null));
             string warning = $"Customer does not exist with ID '{validIdString}'";
 
@@ -98,7 +102,7 @@ namespace DSS.ActionPlans.Tests.FunctionTests
         {
             // Arrange
             _httpRequestService.Setup(x => x.GetCorrelationId(_request)).Returns(validGuid);
-            _httpRequestService.Setup(x => x.GetTouchpointId(_request)).Returns("0000000001");
+            _httpRequestService.Setup(x => x.GetTouchpointId(_request)).Returns(validTouchpointId);
             var listOfActionPlans = new List<Models.ActionPlan>() { };
             _genericCosmosDbService.Setup(x => x.RetrieveDocumentAsync<Customer>(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult(validCustomer));
             _actionPlansCosmosDbService.Setup(x => x.RetrieveActionPlansForCustomerAsync(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult(listOfActionPlans));
@@ -123,7 +127,7 @@ namespace DSS.ActionPlans.Tests.FunctionTests
         {
             // Arrange
             _httpRequestService.Setup(x => x.GetCorrelationId(_request)).Returns(validGuid);
-            _httpRequestService.Setup(x => x.GetTouchpointId(_request)).Returns("0000000001");
+            _httpRequestService.Setup(x => x.GetTouchpointId(_request)).Returns(validTouchpointId);
             var listOfActionPlans = new List<Models.ActionPlan>() { validActionPlan };
             _genericCosmosDbService.Setup(x => x.RetrieveDocumentAsync<Customer>(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult(validCustomer));
             _actionPlansCosmosDbService.Setup(x => x.RetrieveActionPlansForCustomerAsync(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult(listOfActionPlans));
@@ -134,7 +138,7 @@ namespace DSS.ActionPlans.Tests.FunctionTests
 
             // Assert
             Assert.That(result, Is.InstanceOf<JsonResult>());
-            Assert.That(jsonResult.Value, Is.TypeOf<Models.ActionPlan>());
+            Assert.That(jsonResult.Value, Is.TypeOf<System.Dynamic.ExpandoObject>());
             Assert.That(jsonResult.StatusCode, Is.EqualTo((int)HttpStatusCode.OK));
         }
 
@@ -143,7 +147,7 @@ namespace DSS.ActionPlans.Tests.FunctionTests
         {
             // Arrange
             _httpRequestService.Setup(x => x.GetCorrelationId(_request)).Returns(validGuid);
-            _httpRequestService.Setup(x => x.GetTouchpointId(_request)).Returns("0000000001");
+            _httpRequestService.Setup(x => x.GetTouchpointId(_request)).Returns(validTouchpointId);
             var listOfActionPlans = new List<Models.ActionPlan>() { validActionPlan, validActionPlan };
             _genericCosmosDbService.Setup(x => x.RetrieveDocumentAsync<Customer>(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult(validCustomer));
             _actionPlansCosmosDbService.Setup(x => x.RetrieveActionPlansForCustomerAsync(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult(listOfActionPlans));
@@ -154,7 +158,7 @@ namespace DSS.ActionPlans.Tests.FunctionTests
 
             // Assert
             Assert.That(result, Is.InstanceOf<JsonResult>());
-            Assert.That(jsonResult.Value, Is.TypeOf<List<Models.ActionPlan>>());
+            Assert.That(jsonResult.Value, Is.TypeOf<List<System.Dynamic.ExpandoObject>>());
             Assert.That(jsonResult.StatusCode, Is.EqualTo((int)HttpStatusCode.OK));
         }
 

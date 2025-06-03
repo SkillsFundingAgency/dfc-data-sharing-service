@@ -20,7 +20,7 @@ namespace DSS.SharedServices
 
         public async Task<bool> SendQueueMessageAsync<T>(string queueName, string messageId, T messageBody)
         {
-            _logger.LogInformation($"Method '{nameof(SendQueueMessageAsync)}' has been invoked");
+            _logService.LogMethodInvocation(nameof(SendQueueMessageAsync));
             _logger.LogInformation($"Attempting to send message onto queue '{queueName}' with ID '{messageId}'");
 
             ServiceBusSender sender = _serviceBusClient.CreateSender(queueName);

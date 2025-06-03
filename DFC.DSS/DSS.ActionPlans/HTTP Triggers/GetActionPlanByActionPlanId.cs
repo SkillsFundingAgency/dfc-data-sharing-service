@@ -1,9 +1,11 @@
 using DSS.Interfaces;
 using DSS.Models;
+using DSS.Swagger.Annotations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
+using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Text.Json;
 
@@ -15,39 +17,52 @@ namespace DSS.ActionPlans.HTTP_Triggers
         private readonly IHttpRequestService _httpRequestService;
         private readonly IGenericCosmosDbService _cosmosDbService;
         private readonly ILogService _logService;
+        private readonly IDynamicConverterService _dynamicConverterService;
 
+#pragma warning disable 8602
         private readonly string customerDatabaseName = Environment.GetEnvironmentVariable("customerDatabaseName").ToString();
         private readonly string customerContainerName = Environment.GetEnvironmentVariable("customerContainerName").ToString();
         private readonly string interactionDatabaseName = Environment.GetEnvironmentVariable("interactionDatabaseName").ToString();
         private readonly string interactionContainerName = Environment.GetEnvironmentVariable("interactionContainerName").ToString();
         private readonly string actionPlanDatabaseName = Environment.GetEnvironmentVariable("actionPlanDatabaseName").ToString();
         private readonly string actionPlanContainerName = Environment.GetEnvironmentVariable("actionPlanContainerName").ToString();
+#pragma warning restore 8602
 
         public GetActionPlanByActionPlanId(
-            ILogger<GetActionPlanByActionPlanId> logger, 
-            IHttpRequestService httpRequestService, 
+            ILogger<GetActionPlanByActionPlanId> logger,
+            IHttpRequestService httpRequestService,
             IGenericCosmosDbService cosmosDbService,
-            ILogService logService
-        ) {
+            ILogService logService,
+            IDynamicConverterService dynamicConverterService
+        )
+        {
             _logger = logger;
             _httpRequestService = httpRequestService;
             _cosmosDbService = cosmosDbService;
             _logService = logService;
+            _dynamicConverterService = dynamicConverterService;
         }
 
         [Function("GetActionPlanByActionPlanId")]
+        [ProducesResponseType(typeof(Models.ActionPlan), (int)HttpStatusCode.OK)]
+        [Response(HttpStatusCode = (int)HttpStatusCode.OK, Description = "Action Plan found", ShowSchema = true)]
+        [Response(HttpStatusCode = (int)HttpStatusCode.NoContent, Description = "Action Plan does not exist", ShowSchema = false)]
+        [Response(HttpStatusCode = (int)HttpStatusCode.BadRequest, Description = "Request was malformed", ShowSchema = false)]
+        [Response(HttpStatusCode = (int)HttpStatusCode.Unauthorized, Description = "API key is unknown or invalid", ShowSchema = false)]
+        [Response(HttpStatusCode = (int)HttpStatusCode.Forbidden, Description = "Insufficient access", ShowSchema = false)]
+        [Display(Name = "Get", Description = "Ability to retrieve an individual action plan for the given customer")]
         public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "Customers/{customerId}/Interactions/{interactionId}/ActionPlans/{actionPlanId}")] HttpRequest req, string customerId, string interactionId, string actionPlanId)
         {
-            _logger.LogInformation($"Function '{nameof(GetActionPlanByActionPlanId)}' has been invoked");
+            _logService.LogFunctionInvocation(nameof(GetActionPlanByActionPlanId));
             Guid correlationId = _httpRequestService.GetCorrelationId(req);
 
-            _logger.LogInformation($"Correlation GUID is '{correlationId}'");
+            _logger.LogInformation("Correlation GUID is '{correlationId}'", correlationId);
             string touchpointId = _httpRequestService.GetTouchpointId(req);
 
             if (string.IsNullOrWhiteSpace(touchpointId))
             {
                 _logger.LogWarning("Unable to locate 'TouchpointId' in request header");
-                _logService.LogFunctionExit(nameof(GetActionPlanByActionPlanId));
+                _logService.LogFunctionExit(nameof(GetActionPlanByActionPlanId), correlationId);
                 return new BadRequestObjectResult("Unable to locate 'TouchpointId' in request header");
             }
 
@@ -55,58 +70,62 @@ namespace DSS.ActionPlans.HTTP_Triggers
             bool InteractionIdIsValidGuid = Guid.TryParse(interactionId, out var interactionGuid);
             bool ActionPlanIdIsValidGuid = Guid.TryParse(actionPlanId, out var actionPlanGuid);
             bool queryParamsValidatedSuccessfully = customerIdIsValidGuid && InteractionIdIsValidGuid && ActionPlanIdIsValidGuid;
-            
+
             if (!queryParamsValidatedSuccessfully)
             {
-                _logger.LogWarning($"Unrecognised or invalid entry identified. Customer ID '{customerId}' , Interaction ID '{interactionId}' , Action Plan ID '{actionPlanId}'");
-                _logService.LogFunctionExit(nameof(GetActionPlanByActionPlanId));
+                _logger.LogWarning("Unrecognised or invalid entry identified. Customer ID '{customerId}' , Interaction ID '{interactionId}' , Action Plan ID '{actionPlanId}'", customerId, interactionId, actionPlanId);
+                _logService.LogFunctionExit(nameof(GetActionPlanByActionPlanId), correlationId);
                 return new BadRequestObjectResult("Unrecognised or invalid entry identified (Customer ID, Interaction ID and/or Action Plan ID)");
             }
 
-            _logger.LogInformation($"HTTP request validation successful. Customer ID '{customerGuid}' , Interaction ID '{interactionGuid}' , Action Plan ID '{actionPlanGuid}'");
+            _logger.LogInformation("HTTP request validation successful. Customer ID '{customerGuid}' , Interaction ID '{interactionGuid}' , Action Plan ID '{actionPlanGuid}'", customerId, interactionId, actionPlanId);
             _logger.LogInformation("Attempting to check if the customer exists");
 
-            Customer customer = await _cosmosDbService.RetrieveDocumentAsync<Customer>(customerGuid.ToString(), customerDatabaseName, customerContainerName);
+            Customer? customer = await _cosmosDbService.RetrieveDocumentAsync<Customer>(customerGuid.ToString(), customerDatabaseName, customerContainerName);
             if (customer == null)
             {
-                _logger.LogWarning($"Customer does not exist with ID '{customerGuid}'");
-                _logService.LogFunctionExit(nameof(GetActionPlanByActionPlanId));
+                _logger.LogWarning("Customer does not exist with ID '{customerGuid}'", customerGuid);
+                _logService.LogFunctionExit(nameof(GetActionPlanByActionPlanId), correlationId);
                 return new NoContentResult();
             }
 
             _logger.LogInformation("Attempting to check if the interaction exists and whether it belongs to the customer");
-            
-            Interaction interaction = await _cosmosDbService.RetrieveDocumentAsync<Interaction>(interactionGuid.ToString(), interactionDatabaseName, interactionContainerName);
-            if (interaction == null) 
+
+            Interaction? interaction = await _cosmosDbService.RetrieveDocumentAsync<Interaction>(interactionGuid.ToString(), interactionDatabaseName, interactionContainerName);
+            if (interaction == null)
             {
-                _logger.LogWarning($"Interaction with ID '{interactionGuid}' does not exist");
-                _logService.LogFunctionExit(nameof(GetActionPlanByActionPlanId));
+                _logger.LogWarning("Interaction with ID '{interactionGuid}' does not exist", interactionGuid);
+                _logService.LogFunctionExit(nameof(GetActionPlanByActionPlanId), correlationId);
                 return new NoContentResult();
-            } 
+            }
             else if (interaction.CustomerId != customerGuid)
             {
-                _logger.LogWarning($"Interaction with ID '{interactionGuid}' does not belong to customer with ID '{customerGuid}'");
-                _logService.LogFunctionExit(nameof(GetActionPlanByActionPlanId));
+                _logger.LogWarning("Interaction with ID '{interactionGuid}' does not belong to customer with ID '{customerGuid}'", interactionGuid, customer);
+                _logService.LogFunctionExit(nameof(GetActionPlanByActionPlanId), correlationId);
                 return new NoContentResult();
             }
 
             _logger.LogInformation("Attempting to retrieve action plan and confirm whether it belongs to the customer");
-            ActionPlan actionPlan = await _cosmosDbService.RetrieveDocumentAsync<ActionPlan>(actionPlanGuid.ToString(), actionPlanDatabaseName, actionPlanContainerName);
+            Models.ActionPlan? actionPlan = await _cosmosDbService.RetrieveDocumentAsync<Models.ActionPlan>(actionPlanGuid.ToString(), actionPlanDatabaseName, actionPlanContainerName);
             if (actionPlan == null)
             {
-                _logger.LogWarning($"Action Plan does not exist with ID '{actionPlanGuid}'");
-                _logService.LogFunctionExit(nameof(GetActionPlanByActionPlanId));
+                _logger.LogWarning("Action Plan does not exist with ID '{actionPlanGuid}'", actionPlanGuid);
+                _logService.LogFunctionExit(nameof(GetActionPlanByActionPlanId), correlationId);
                 return new NoContentResult();
             }
             else if (actionPlan.CustomerId != customerGuid)
             {
-                _logger.LogWarning($"Action Plan with ID '{actionPlanGuid}' does not belong to customer with ID '{customerGuid}'");
-                _logService.LogFunctionExit(nameof(GetActionPlanByActionPlanId));
+                _logger.LogWarning("Action Plan with ID '{actionPlanGuid}' does not belong to customer with ID '{customerGuid}'", actionPlanGuid, customerGuid);
+                _logService.LogFunctionExit(nameof(GetActionPlanByActionPlanId), correlationId);
                 return new NoContentResult();
             }
 
-            _logService.LogFunctionExit(nameof(GetActionPlanByActionPlanId));
-            return new JsonResult(actionPlan, new JsonSerializerOptions()) { StatusCode = (int)HttpStatusCode.OK };
+            _logService.LogFunctionExit(nameof(GetActionPlanByActionPlanId), correlationId);
+            return new JsonResult(_dynamicConverterService.RenameProperty(actionPlan, "id", "ActionPlanId"),
+                new JsonSerializerOptions())
+            {
+                StatusCode = (int)HttpStatusCode.OK
+            };
         }
     }
 }

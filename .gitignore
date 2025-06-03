@@ -3,3 +3,4 @@ obj/
 .vs/
 *.cache
 launchSettings.json
+/DFC.DSS/DSS.ActionPlans/Properties/launchsettings.json

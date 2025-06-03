@@ -1,8 +1,10 @@
 using Azure.Messaging.ServiceBus;
+using DSS.ActionPlan.Validation;
 using DSS.ActionPlans.Interfaces;
 using DSS.ActionPlans.Services;
 using DSS.Interfaces;
 using DSS.SharedServices;
+using DSS.Swagger;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,6 +27,9 @@ namespace DSS.ActionPlans
                    services.AddSingleton<IServiceBusService, ServiceBusService>();
                    services.AddSingleton<IHttpRequestService, HttpRequestService>();
                    services.AddSingleton<ILogService, LogService>();
+                   services.AddSingleton<IDynamicConverterService, DynamicConverterService>();
+                   services.AddSingleton<IValidate, Validate>();
+                   services.AddScoped<ISwaggerDocumentGenerator, SwaggerDocumentGenerator>();
                    services.AddSingleton(sp =>
                    {
                        var options = new CosmosClientOptions()
@@ -49,7 +54,7 @@ namespace DSS.ActionPlans
                    });
                })
                .Build();
-            host.Run();
+            await host.RunAsync();
         }
     }
 }
