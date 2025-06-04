@@ -6,8 +6,6 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="DFC.Functions.DI.Standard" Version="0.1.0" />
-		<PackageReference Include="DFC.JSON.Standard" Version="0.1.4" />
 		<PackageReference Include="Microsoft.Azure.Functions.Worker" Version="1.22.0" />
 		<PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http" Version="3.2.0" />
 		<PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Http" Version="3.2.0" />
